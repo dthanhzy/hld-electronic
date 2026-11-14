@@ -84,7 +84,7 @@ body{background:#121110}
 <div id="toast" class="toast" hidden></div>
 
 <script>
-const API_BASE = ['localhost','127.0.0.1'].includes(location.hostname) ? 'http://localhost:3000' : 'https://TEN-APP-CUA-BAN.onrender.com';
+const API_BASE = ['localhost','127.0.0.1'].includes(location.hostname) ? 'http://localhost:3000' : 'https://hld-electronic.onrender.com';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = n => Number(n).toLocaleString('vi-VN') + ' ₫';
