@@ -3,59 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hệ Thống Loa - Tư vấn AI & Chẩn đoán sự cố</title>
+<title>HLD Electronic - Mua loa, tư vấn AI & chẩn đoán sự cố</title>
+<meta name="description" content="Loa karaoke, loa xách tay: tư vấn chọn loa theo nhu cầu và chẩn đoán sự cố bằng AI.">
+<link rel="icon" type="image/png" href="images/logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#6366f1;--primary-dark:#4f46e5;--bg-card:rgba(20,26,51,.8);--text-white:#f8fafc;--text-gray:#94a3b8;--border-card:rgba(255,255,255,.08);--ok:#22c55e;--warn:#f59e0b}
+:root{--primary:#c9a24b;--primary-dark:#a98433;--bg-card:rgba(31,28,24,.85);--text-white:#f3ece0;--text-gray:#a39a8b;--border-card:rgba(255,255,255,.08);--ok:#22c55e;--warn:#f59e0b;--danger:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0b1020,#1e1b4b);color:var(--text-white);line-height:1.6;min-height:100vh}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Be Vietnam Pro',sans-serif;background:linear-gradient(135deg,#0b1020,#26211a);background-attachment:fixed;color:var(--text-white);line-height:1.6;min-height:100vh}
 a{text-decoration:none;color:inherit}
-header{position:fixed;top:0;left:0;width:100%;background:rgba(11,16,32,.9);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border-card)}
-.nav-container{max-width:1200px;margin:0 auto;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #e0c27a;outline-offset:2px}
+
+/* header */
+header{position:fixed;top:0;left:0;width:100%;background:rgba(18,17,16,.9);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid var(--border-card)}
+.nav-container{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}
 .logo{font-size:1.5rem;font-weight:800}.logo span{color:var(--primary)}
 .nav-links{display:flex;gap:25px}
 .nav-links a{color:var(--text-gray);font-weight:500;transition:.3s}.nav-links a:hover{color:var(--text-white)}
-.hero{padding:150px 20px 70px;text-align:center;background:radial-gradient(circle at top,rgba(99,102,241,.12),transparent 50%)}
-.hero h1{font-size:2.5rem;font-weight:800;margin-bottom:15px;background:linear-gradient(to right,#fff,#a5b4fc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cart-btn{position:relative;background:rgba(255,255,255,.06);border:1px solid var(--border-card);color:#fff;width:44px;height:44px;border-radius:12px;font-size:1.05rem;cursor:pointer;transition:.2s}
+.cart-btn:hover{border-color:var(--primary);background:rgba(201,162,75,.18)}
+.badge{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--danger);color:#fff;font-size:.72rem;font-weight:700;display:none;align-items:center;justify-content:center}
+.badge.show{display:flex}
+.badge.bump{animation:bump .35s}
+@keyframes bump{50%{transform:scale(1.35)}}
+
+/* hero + sections */
+.hero{padding:150px 20px 70px;text-align:center}
+.hero h1{font-size:2.6rem;font-weight:800;line-height:1.2;letter-spacing:-.02em;margin:0 auto 16px;max-width:820px;color:var(--text-white)}
 .hero p{color:var(--text-gray);max-width:640px;margin:0 auto 30px}
-.btn{display:inline-block;padding:12px 25px;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s;border:none;font-family:inherit;font-size:.95rem}
+.btn{display:inline-block;padding:12px 25px;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s;border:none;font-size:.95rem;text-align:center}
 .btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 5px 15px rgba(99,102,241,.4)}
+.btn-primary:hover:not(:disabled){background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 5px 15px rgba(201,162,75,.4)}
 .btn-ghost{background:transparent;border:1px solid var(--border-card);color:var(--text-white)}
-.btn-ghost:hover{border-color:var(--primary)}
+.btn-ghost:hover:not(:disabled){border-color:var(--primary)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:8px 14px;font-size:.85rem}
+.btn-block{display:block;width:100%}
 .container{max-width:1200px;margin:0 auto;padding:50px 20px}
 .section-title{font-size:2rem;text-align:center;margin-bottom:10px}
 .section-title::after{content:'';display:block;width:80px;height:4px;background:var(--primary);margin:10px auto;border-radius:2px}
 .section-sub{text-align:center;color:var(--text-gray);margin-bottom:35px}
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px}
+
+/* products */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
 .product-card{background:var(--bg-card);border:1px solid var(--border-card);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
 .product-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,.3);border-color:var(--primary)}
-.product-img{height:200px;background-size:cover;background-position:center;background-color:#1e1b4b}
-.product-info{padding:20px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
-.product-title{font-size:1.2rem;margin-bottom:10px}
-.product-desc{color:var(--text-gray);font-size:.9rem;margin-bottom:15px}
-.product-price{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:15px}
+.product-img{position:relative;aspect-ratio:1/1;background:#1a1814;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:contain;display:block;background:#1a1814}
+.ph{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-weight:800;font-size:1.3rem;color:#e0c27a;background:linear-gradient(135deg,#26211a,#3a3224);text-align:center;padding:10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.toolbar input,.toolbar select{background:rgba(255,255,255,.06);border:1px solid var(--border-card);border-radius:10px;color:#fff;padding:9px 12px;font:inherit;font-size:.9rem}
+.toolbar input{flex:1;min-width:180px}.toolbar select{width:auto}.toolbar select option{color:#000}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid var(--border-card);background:transparent;color:var(--text-gray);cursor:pointer;font-size:.85rem}
+.tab.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.rec{border:1px solid var(--border-card);border-radius:12px;padding:14px;margin-bottom:12px;background:rgba(255,255,255,.03)}
+.rec.main{border-color:var(--primary)}
+.rec .row{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;align-items:center;margin-top:8px}
+.detail-img{max-height:300px;width:100%;object-fit:contain;background:#1a1814;border-radius:10px;margin-bottom:12px}
+.dtable{width:100%;border-collapse:collapse;font-size:.88rem;margin:10px 0}
+.dtable td{padding:6px 8px;border-bottom:1px solid var(--border-card);vertical-align:top}.dtable td:first-child{color:var(--text-gray);width:38%}
+.sources{margin-top:8px;font-size:.78rem;border-top:1px solid var(--border-card);padding-top:6px;color:var(--text-gray)}
+.sources a{color:#e0c27a;text-decoration:underline;display:block;word-break:break-word}
+.price-note{font-size:.72rem;color:var(--text-gray);margin-top:4px}
+.stock-tag{position:absolute;top:12px;left:12px;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(0,0,0,.6);color:#86efac}
+.stock-tag.out{color:#fca5a5}.stock-tag.low{color:#fcd34d}
+.product-info{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.product-title{font-size:1.02rem;line-height:1.35;margin-bottom:6px;min-height:2.7em}
+.product-desc{color:var(--text-gray);font-size:.85rem;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.specs{list-style:none;font-size:.82rem;color:#d6cdbd}
+.specs li{display:flex;gap:6px}.specs span{color:var(--text-gray)}
+.product-price{font-size:1.3rem;font-weight:800;color:#e0c27a;margin-bottom:10px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-row .btn{flex:1;white-space:nowrap}
+.state{grid-column:1/-1;text-align:center;color:var(--text-gray);padding:30px 10px}
+.state.error{color:#fca5a5}
+
+/* giao diện bổ sung */
+.demo-bar{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:#fcd34d;border-radius:10px;padding:9px 14px;font-size:.85rem;text-align:center;margin-bottom:18px}
+.eq{display:flex;gap:5px;justify-content:center;align-items:flex-end;height:34px;margin:0 auto 22px}
+.eq i{display:block;width:6px;border-radius:3px;background:linear-gradient(#e0c27a,#c9a24b);animation:eq 1.1s ease-in-out infinite}
+.eq i:nth-child(2n){animation-duration:.8s}.eq i:nth-child(3n){animation-duration:1.4s}.eq i:nth-child(4n){animation-delay:.2s}
+@keyframes eq{0%,100%{height:20%}50%{height:100%}}
+.hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero .btn{padding:13px 28px}
+.trust{max-width:1100px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.trust div{display:flex;gap:12px;align-items:center;background:var(--bg-card);border:1px solid var(--border-card);border-radius:12px;padding:14px 16px;font-size:.86rem;color:#d6cdbd}
+.trust i{font-size:1.3rem;color:#e0c27a;width:26px;text-align:center}
+.trust b{display:block;color:#fff;font-size:.92rem}
+.chipline{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chipline span{font-size:.74rem;padding:3px 9px;border-radius:12px;background:rgba(255,255,255,.06);color:#d6cdbd;white-space:nowrap}
+.cmp{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--text-gray);cursor:pointer;margin-bottom:10px;user-select:none}
+.cmp input{width:auto}
+.cmp-bar{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(120px);background:#26211a;border:1px solid var(--primary);border-radius:14px;padding:10px 14px;display:flex;gap:12px;align-items:center;z-index:9990;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .25s;max-width:94vw}
+.cmp-bar.show{transform:translateX(-50%)}
+.skel{background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.1),rgba(255,255,255,.04));background-size:200% 100%;animation:sk 1.2s infinite;border-radius:16px;height:380px}
+@keyframes sk{to{background-position:-200% 0}}
+.cmp-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.cmp-table th,.cmp-table td{padding:8px 8px;border-bottom:1px solid var(--border-card);text-align:left;vertical-align:top}
+.cmp-table th{color:#fff}.cmp-table td:first-child{color:var(--text-gray);white-space:nowrap}
+.cmp-wrap{overflow-x:auto}
+.fb{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.76rem;color:var(--text-gray)}
+.fb button{background:none;border:1px solid var(--border-card);color:var(--text-gray);border-radius:12px;padding:2px 10px;cursor:pointer;font-size:.78rem}
+.fb button:hover{border-color:var(--primary);color:#fff}
+.site-footer{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;max-width:1100px;margin:0 auto;text-align:left}
+.site-footer h4{color:#fff;margin-bottom:10px;font-size:.95rem}
+.site-footer p,.site-footer a{display:block;font-size:.86rem;margin-bottom:6px}
+.site-footer a:hover{color:#fff}
+.copy{margin-top:28px;padding-top:16px;border-top:1px solid var(--border-card);font-size:.8rem;text-align:center}
+.nav-links a.on{color:#fff}
+/* panels + forms */
 .panel{background:var(--bg-card);border:1px solid var(--border-card);border-radius:16px;padding:28px;max-width:860px;margin:0 auto}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:20px}
+.field{margin-bottom:14px}
 label{display:block;font-size:.85rem;color:var(--text-gray);margin-bottom:6px;font-weight:500}
-select,input[type=number],textarea{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--border-card);color:#fff;padding:11px;border-radius:8px;font-family:inherit;font-size:.95rem;outline:none}
-select:focus,input:focus{border-color:var(--primary)}
-select option{background:#14183a}
+input,select,textarea{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--border-card);color:#fff;padding:11px;border-radius:8px;font-family:inherit;font-size:.95rem;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--primary)}
+textarea{resize:vertical;min-height:80px}
+select option{background:#1b1814}
+input[type=checkbox]{width:auto}
+.check{display:flex;align-items:center;gap:8px;font-size:.88rem;color:#d6cdbd;margin-bottom:14px}
+.check label{margin:0;color:inherit}
+.hint{font-size:.82rem;color:var(--text-gray);margin-top:10px}
+.form-error{color:#fca5a5;font-size:.88rem;min-height:1.2em;margin-bottom:10px}
 .result{margin-top:22px;display:none;border-top:1px solid var(--border-card);padding-top:20px}
 .result h4{font-size:1.1rem;margin-bottom:10px}
-.result ul{padding-left:20px;color:#cbd5e1;margin-bottom:12px}
-.tag{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:20px;margin-right:6px;background:rgba(99,102,241,.2);color:#a5b4fc}
+.result ul{padding-left:20px;color:#d6cdbd;margin-bottom:12px}
+.tag{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:20px;margin-right:6px;background:rgba(201,162,75,.2);color:#e0c27a}
 .tag.warn{background:rgba(245,158,11,.18);color:#fbbf24}
+.tag.ok{background:rgba(34,197,94,.2);color:#86efac}
+.tag.bad{background:rgba(239,68,68,.18);color:#fca5a5}
 .callout{background:rgba(245,158,11,.1);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;font-size:.88rem;color:#fcd34d;margin-top:12px}
 .cause{background:rgba(255,255,255,.03);border:1px solid var(--border-card);border-radius:10px;padding:14px;margin-bottom:12px}
-.cause strong{color:#a5b4fc}
-footer{background:#050814;padding:40px 20px;text-align:center;color:var(--text-gray);border-top:1px solid var(--border-card);margin-top:50px}
+.cause strong{color:#e0c27a}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+/* order tracking */
+.steps{display:flex;margin:16px 0 8px}
+.step{flex:1;text-align:center;font-size:.76rem;color:var(--text-gray);position:relative}
+.step::before{content:'';display:block;width:14px;height:14px;border-radius:50%;background:#4a4338;margin:0 auto 6px;position:relative;z-index:1}
+.step::after{content:'';position:absolute;top:6px;left:-50%;width:100%;height:2px;background:#4a4338}
+.step:first-child::after{display:none}
+.step.done{color:#ece4d6}.step.done::before,.step.done::after{background:var(--ok)}
+.items-table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:10px}
+.items-table td,.items-table th{padding:8px 6px;border-bottom:1px solid var(--border-card);text-align:left}
+.items-table td:last-child,.items-table th:last-child{text-align:right}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;font-size:.9rem;margin-top:12px}
+.kv dt{color:var(--text-gray)}
+
+footer{background:#0c0b0a;padding:40px 20px;text-align:center;color:var(--text-gray);border-top:1px solid var(--border-card);margin-top:50px}
+footer .link{background:none;border:none;color:#e0c27a;cursor:pointer;text-decoration:underline;font-size:inherit}
+
+/* drawer giỏ hàng */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10000;opacity:0;visibility:hidden;transition:.25s}
+.overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100vw);background:#1b1814;border-left:1px solid var(--border-card);z-index:10001;display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .28s,visibility .28s}
+.drawer.open{transform:none;visibility:visible}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--border-card)}
+.drawer-head h3{font-size:1.15rem}
+.icon-btn{background:none;border:none;color:var(--text-gray);font-size:1.2rem;cursor:pointer;width:36px;height:36px;border-radius:8px}
+.icon-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+.drawer-body{flex:1;overflow-y:auto;padding:14px 18px}
+.drawer-foot{padding:16px 18px;border-top:1px solid var(--border-card)}
+.total-row{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-bottom:12px}
+.cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-card)}
+.cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px;background:#26211a}
+.ci-name{font-size:.92rem;font-weight:600;line-height:1.3}
+.ci-price{font-size:.85rem;color:var(--text-gray)}
+.qty{display:inline-flex;align-items:center;margin-top:6px;border:1px solid var(--border-card);border-radius:8px}
+.qty button{background:none;border:none;color:#fff;width:30px;height:30px;cursor:pointer;font-size:1rem}
+.qty button:hover{background:rgba(255,255,255,.08)}
+.qty span{min-width:28px;text-align:center;font-size:.9rem}
+.ci-right{text-align:right;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end}
+.ci-line{font-weight:700;font-size:.92rem}
+.ci-del{background:none;border:none;color:var(--text-gray);cursor:pointer;font-size:.8rem}
+.ci-del:hover{color:#fca5a5}
+.empty{text-align:center;color:var(--text-gray);padding:50px 10px}
+.empty i{font-size:2.4rem;margin-bottom:12px;opacity:.5}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:10002;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:.2s}
+.modal.open{opacity:1;visibility:visible}
+.modal-box{background:#1b1814;border:1px solid var(--border-card);border-radius:16px;width:min(540px,100%);max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border-card)}
+.modal-head h3{font-size:1.15rem}
+.modal-body{padding:20px;overflow-y:auto}
+.co-sum{background:rgba(255,255,255,.04);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:.9rem}
+.co-sum div{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.co-sum .t{border-top:1px solid var(--border-card);margin-top:6px;padding-top:8px;font-weight:700}
+.success{text-align:center}
+.success .big{font-size:3rem;color:var(--ok)}
+.success .code{font-size:1.5rem;font-weight:800;letter-spacing:1px;background:rgba(0,0,0,.35);border:1px dashed var(--primary);border-radius:10px;padding:10px;margin:12px 0}
+
+/* toast */
+.toasts{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:10003;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:max-content;max-width:92vw}
+.toast{background:#2a251e;border:1px solid var(--border-card);color:#fff;padding:10px 16px;border-radius:10px;font-size:.9rem;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tin .25s}
+.toast.ok{border-color:rgba(34,197,94,.5)}.toast.err{border-color:rgba(239,68,68,.6)}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}}
+
 /* chat */
-.chat-toggle{position:fixed;bottom:30px;right:30px;width:65px;height:65px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;cursor:pointer;z-index:9999;box-shadow:0 5px 15px rgba(99,102,241,.5);border:none;transition:transform .3s,background .3s}
+.chat-toggle{position:fixed;bottom:30px;right:30px;width:65px;height:65px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;cursor:pointer;z-index:9999;box-shadow:0 5px 15px rgba(201,162,75,.5);border:none;transition:transform .3s,background .3s}
 .chat-toggle:hover{transform:scale(1.1);background:var(--primary-dark)}
-.chat-window{position:fixed;bottom:100px;right:30px;width:390px;max-width:92vw;height:540px;max-height:80vh;background:rgba(20,26,51,.95);backdrop-filter:blur(15px);border:1px solid var(--border-card);border-radius:20px;z-index:9998;display:none;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,.5);overflow:hidden}
+.chat-window{position:fixed;bottom:100px;right:30px;width:390px;max-width:92vw;height:540px;max-height:80vh;background:rgba(30,27,23,.96);backdrop-filter:blur(15px);border:1px solid var(--border-card);border-radius:20px;z-index:9998;display:none;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,.5);overflow:hidden}
 .chat-header{background:var(--primary);padding:14px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
 .chat-header .left{display:flex;align-items:center;gap:8px;font-weight:600}
 .chat-header button{background:none;border:none;color:rgba(255,255,255,.85);cursor:pointer;font-size:1.05rem;margin-left:12px}
@@ -71,34 +223,100 @@ footer{background:#050814;padding:40px 20px;text-align:center;color:var(--text-g
 .chat-input{flex:1;background:rgba(0,0,0,.3);border:none;padding:10px;border-radius:8px;color:#fff;outline:none;font-family:inherit}
 .btn-send{background:var(--primary);color:#fff;border:none;padding:10px 15px;border-radius:8px;cursor:pointer}
 .btn-send:hover{background:var(--primary-dark)}
-@media(max-width:640px){.nav-links{display:none}.hero h1{font-size:1.9rem}}
+
+@media(max-width:640px){
+  .nav-container{flex-wrap:wrap;padding:10px 14px}.nav-links{order:3;width:100%;overflow-x:auto;gap:18px;white-space:nowrap;padding-bottom:2px;font-size:.9rem}.hero{padding-top:130px}.hero h1{font-size:1.9rem}
+  .product-grid{grid-template-columns:repeat(2,1fr);gap:12px}.product-info{padding:12px}.product-title{font-size:.92rem}.btn-row .btn{padding:9px 8px;font-size:.82rem}.product-price{font-size:1.05rem}
+  .container{padding:40px 16px}.panel{padding:20px}
+  .chat-toggle{bottom:20px;right:16px;width:56px;height:56px}
+  .chat-window{right:8px;bottom:84px}
+  .kv{grid-template-columns:90px 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== Phong cách: thùng loa gỗ tối + lưới loa đục lỗ + đồng thau ===== */
+:root{--primary:#c9a24b;--primary-dark:#a98433;--ink:#17140f;--bg-card:rgba(33,29,24,.88)}
+body{background:#121110}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -8%,rgba(201,162,75,.16),transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 100%,rgba(120,70,30,.14),transparent 70%),
+    radial-gradient(circle at 1px 1px,rgba(255,240,210,.075) 1px,transparent 1.6px) 0 0/12px 12px;
+  -webkit-mask-image:linear-gradient(#000 55%,rgba(0,0,0,.35));mask-image:linear-gradient(#000 55%,rgba(0,0,0,.35))}
+header{background:rgba(18,17,16,.82);border-bottom:1px solid rgba(201,162,75,.18)}
+.logo span{color:var(--primary)}
+.btn-primary,.tab.on,.btn-send,.chat-toggle,.msg-user,.chat-header{color:var(--ink)}
+.chat-header button{color:rgba(23,20,15,.8)}.chat-header button:hover{color:var(--ink)}
+.btn-primary:hover:not(:disabled){box-shadow:0 6px 18px rgba(201,162,75,.35)}
+.btn-ghost{border-color:rgba(243,236,224,.22)}
+.section-title::after{width:48px;height:3px}
+.eq i{background:linear-gradient(#e0c27a,#a98433)}
+.trust div,.product-card,.panel,.rec,.cause{border-color:rgba(243,236,224,.09)}
+.product-card:hover{border-color:rgba(201,162,75,.55);box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.product-img{background:radial-gradient(circle at 50% 40%,#2a241b,#171410)}
+.ph{background:radial-gradient(circle at 50% 40%,#2e271c,#171410);color:#e0c27a;letter-spacing:.02em}
+#custom,#track{position:relative}
+#custom::before,#track::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 100vmax rgba(255,240,210,.025);clip-path:inset(0 -100vmax);z-index:-1;pointer-events:none}
+html,body{overflow-x:clip}
+footer{background:#0c0b0a;border-top:1px solid rgba(201,162,75,.18)}
+.demo-bar{background:rgba(201,162,75,.1);border-color:rgba(201,162,75,.35);color:#e0c27a}
+.tag{background:rgba(201,162,75,.16)}
+.skel{background:linear-gradient(90deg,rgba(255,240,210,.04),rgba(255,240,210,.09),rgba(255,240,210,.04));background-size:200% 100%}
+.cmp-bar{background:#1b1814}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-white)}
+.logo img{height:40px;width:auto;display:block}
+.logo-txt{font-weight:800;font-size:1.15rem;letter-spacing:.01em}.logo-txt em{font-style:normal;font-weight:500;color:var(--primary)}
+@media(max-width:640px){.logo img{height:34px}.logo-txt{font-size:1rem}}
+.pay{margin-top:16px;padding:14px;border:1px solid var(--border-card);border-radius:12px;text-align:center}
+.pay img{background:#fff;border-radius:10px;padding:6px;margin:8px auto;display:block;max-width:100%;height:auto}
+.pay table{margin:8px auto;font-size:.88rem;text-align:left;border-collapse:collapse}
+.pay td{padding:4px 8px;border-bottom:1px solid var(--border-card)}.pay td:first-child{color:var(--text-gray)}
 </style>
 </head>
-<body>
+<body id="top">
 
 <header>
   <div class="nav-container">
-    <div class="logo">Hệ Thống <span>Loa</span></div>
+    <a class="logo" href="#top" aria-label="HLD Electronic - về đầu trang"><img src="images/logo.png" alt="HLD Electronic" width="64" height="48"><span class="logo-txt">HLD <em>Electronic</em></span></a>
     <div class="nav-links">
       <a href="#products">Sản phẩm</a>
       <a href="#custom">Tuỳ chỉnh loa</a>
       <a href="#diagnose">Chẩn đoán sự cố</a>
+      <a href="#track">Tra cứu đơn</a>
       <a href="#contact">Liên hệ</a>
     </div>
+    <button class="cart-btn" data-act="open-cart" aria-label="Mở giỏ hàng">
+      <i class="fas fa-cart-shopping"></i><span class="badge" id="cartBadge">0</span>
+    </button>
   </div>
 </header>
 
 <section class="hero">
-  <h1>Custom Loa Theo Nhu Cầu & Chẩn Đoán Sự Cố Bằng AI</h1>
+  <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <h1>Chọn đúng loa theo nhu cầu, chẩn đoán lỗi cùng AI</h1>
   <p>Cho biết không gian, mục đích và ngân sách để nhận gợi ý loa phù hợp. Loa đang gặp lỗi? Mô tả triệu chứng để biết nguyên nhân và cách khắc phục.</p>
-  <a class="btn btn-primary" href="#custom">Tuỳ chỉnh loa ngay</a>
-  <a class="btn btn-ghost" href="#diagnose" style="margin-left:8px">Chẩn đoán loa hư</a>
+  <div class="cta">
+    <a class="btn btn-primary" href="#custom"><i class="fas fa-sliders"></i> Chọn loa theo nhu cầu</a>
+    <a class="btn btn-ghost" href="#diagnose"><i class="fas fa-screwdriver-wrench"></i> Loa tôi bị hỏng</a>
+  </div>
 </section>
+<div class="trust">
+  <div><i class="fas fa-shield-halved"></i><span><b>Bảo hành 12 tháng</b>Theo thông tin nhà sản xuất</span></div>
+  <div><i class="fas fa-robot"></i><span><b>Tư vấn bằng AI</b>Hỏi bất cứ lúc nào</span></div>
+  <div><i class="fas fa-stethoscope"></i><span><b>Chẩn đoán sự cố</b>Hướng dẫn tự kiểm tra an toàn</span></div>
+  <div><i class="fas fa-box-open"></i><span><b>Theo dõi đơn hàng</b>Tra cứu bằng mã đơn</span></div>
+</div>
 
 <div class="container" id="products">
-  <h2 class="section-title">Sản Phẩm Nổi Bật</h2>
-  <p class="section-sub">Nhấn "Tư vấn AI" để hỏi chi tiết về từng mẫu</p>
-  <div class="product-grid" id="productGrid"></div>
+  <h2 class="section-title">Sản Phẩm</h2>
+  <p class="section-sub">Nhấn vào sản phẩm để xem chi tiết và hỏi AI tư vấn thêm</p>
+  <div class="demo-bar" id="demoBar" hidden><i class="fas fa-circle-info"></i> Giá và tồn kho trên trang là dữ liệu demo, chưa phải giá bán chính thức.</div>
+  <div class="tabs" id="catTabs" role="tablist"></div>
+  <div class="toolbar">
+    <input type="search" id="pSearch" placeholder="Tìm theo tên, mã (ví dụ JHK-1515)..." aria-label="Tìm sản phẩm">
+    <select id="pSort" aria-label="Sắp xếp"><option value="">Sắp xếp mặc định</option><option value="asc">Giá thấp đến cao</option><option value="desc">Giá cao đến thấp</option></select>
+  </div>
+  <div class="product-grid" id="productGrid"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
 </div>
 
 <div class="container" id="custom">
@@ -109,9 +327,9 @@ footer{background:#050814;padding:40px 20px;text-align:center;color:var(--text-g
       <div><label for="cMuc">Mục đích sử dụng</label>
         <select id="cMuc">
           <option value="karaoke">Karaoke gia đình</option>
-          <option value="nhac">Nghe nhạc</option>
-          <option value="rap">Xem phim / rạp hát tại gia</option>
-          <option value="outdoor">Sự kiện / ngoài trời</option>
+          <option value="nhac">Nghe nhạc, giải trí phòng khách</option>
+          <option value="event">Sự kiện, quán, kinh doanh</option>
+          <option value="portable">Mang đi lại, xách tay</option>
         </select></div>
       <div><label for="cDienTich">Diện tích phòng (m²)</label>
         <input type="number" id="cDienTich" min="5" max="500" value="20"></div>
@@ -123,7 +341,7 @@ footer{background:#050814;padding:40px 20px;text-align:center;color:var(--text-g
           <option value="manh">Mạnh, sâu</option>
         </select></div>
     </div>
-    <button class="btn btn-primary" onclick="runConfigurator()">Gợi ý cấu hình</button>
+    <button class="btn btn-primary" id="cGo">Gợi ý cấu hình</button>
     <div class="result" id="cResult"></div>
   </div>
 </div>
@@ -135,25 +353,64 @@ footer{background:#050814;padding:40px 20px;text-align:center;color:var(--text-g
     <div class="form-grid">
       <div><label for="dSym">Triệu chứng</label><select id="dSym"></select></div>
     </div>
-    <button class="btn btn-primary" onclick="runDiagnose()">Chẩn đoán</button>
+    <button class="btn btn-primary" id="dGo">Chẩn đoán</button>
     <div class="result" id="dResult"></div>
   </div>
 </div>
 
+<div class="container" id="track">
+  <h2 class="section-title">Tra Cứu Đơn Hàng</h2>
+  <p class="section-sub">Nhập mã đơn và số điện thoại đã dùng khi đặt hàng</p>
+  <div class="panel">
+    <form id="trackForm">
+      <div class="form-grid">
+        <div><label for="tCode">Mã đơn hàng</label><input id="tCode" type="text" placeholder="HLD-20261111-ABCDE" required maxlength="30" autocomplete="off"></div>
+        <div><label for="tPhone">Số điện thoại</label><input id="tPhone" type="tel" inputmode="tel" placeholder="0912345678" required maxlength="20" autocomplete="tel"></div>
+      </div>
+      <div class="form-error" id="tErr" role="alert"></div>
+      <button class="btn btn-primary" id="tGo" type="submit">Tra cứu</button>
+    </form>
+    <div class="result" id="tResult"></div>
+  </div>
+</div>
+
 <footer id="contact">
-  <p>&copy; <span id="yr"></span> Hệ Thống Loa AI. All rights reserved.</p>
-  <p>Hotline: 1900.123.456 | Email: support@hethongloa.vn</p>
+  <div class="site-footer">
+    <div><h4><img src="images/logo.png" alt="HLD Electronic" style="height:36px;display:block;margin-bottom:8px"></h4><p>Tư vấn chọn loa theo nhu cầu và hỗ trợ chẩn đoán sự cố bằng AI.</p></div>
+    <div><h4>Khám phá</h4><a href="#products">Sản phẩm</a><a href="#custom">Tuỳ chỉnh loa</a><a href="#diagnose">Chẩn đoán sự cố</a><a href="#track">Tra cứu đơn hàng</a></div>
+    <div><h4>Liên hệ</h4><p>Hotline: (cập nhật số thật)</p><p>Email: (cập nhật email thật)</p><p>Loa gặp sự cố? <button class="link" data-act="support">Gửi yêu cầu hỗ trợ / bảo hành</button></p></div>
+  </div>
+  <div class="copy">&copy; <span id="yr"></span> HLD Electronic. Mọi thông tin tư vấn của AI chỉ mang tính tham khảo.</div>
 </footer>
+
+<div class="cmp-bar" id="cmpBar"><span id="cmpTxt"></span><button class="btn btn-primary btn-sm" data-act="cmp-open">So sánh</button><button class="btn btn-ghost btn-sm" data-act="cmp-clear">Bỏ chọn</button></div>
+
+<!-- Giỏ hàng -->
+<div class="overlay" id="overlay" data-act="close-cart"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Giỏ hàng" aria-hidden="true">
+  <div class="drawer-head"><h3><i class="fas fa-cart-shopping"></i> Giỏ hàng</h3><button class="icon-btn" data-act="close-cart" aria-label="Đóng giỏ hàng"><i class="fas fa-times"></i></button></div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot"></div>
+</aside>
+
+<!-- Hộp thoại dùng chung -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head"><h3 id="modalTitle"></h3><button class="icon-btn" data-act="close-modal" aria-label="Đóng"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
 
 <!-- Chat -->
 <button class="chat-toggle" id="chatToggleBtn" onclick="toggleChat()" aria-label="Mở chat"><i class="fas fa-comment-dots"></i></button>
 <div class="chat-window" id="chatWindow">
   <div class="chat-header">
-    <div class="left"><i class="fas fa-robot"></i><span>AI Support - HTL</span></div>
+    <div class="left"><i class="fas fa-robot"></i><span>Trợ lý HLD Electronic</span></div>
     <div>
-      <button onclick="setApiKey()" title="Cài API key"><i class="fas fa-key"></i></button>
-      <button onclick="resetChat()" title="Cuộc trò chuyện mới"><i class="fas fa-rotate-right"></i></button>
-      <button onclick="toggleChat()" title="Đóng"><i class="fas fa-times"></i></button>
+      <button onclick="resetChat()" title="Cuộc trò chuyện mới" aria-label="Cuộc trò chuyện mới"><i class="fas fa-rotate-right"></i></button>
+      <button onclick="toggleChat()" title="Đóng" aria-label="Đóng chat"><i class="fas fa-times"></i></button>
     </div>
   </div>
   <div class="chat-body" id="chatOutput"></div>
@@ -169,194 +426,529 @@ footer{background:#050814;padding:40px 20px;text-align:center;color:var(--text-g
 </div>
 
 <script>
-/* ================= DỮ LIỆU ================= */
-const PRODUCTS = [
-  {id:'bt05', name:'Loa Bookshelf Karaoke BT-05', price:3500000,
-   desc:'Thiết kế tinh tế, công suất 150W, Bluetooth 5.2, âm thanh trong vắt, bass mạnh mẽ.',
-   img:'https://images.unsplash.com/photo-1542718873-663c1d64b0d9?auto=format&fit=crop&w=500&q=60'},
-  {id:'s900', name:'Loa Subwoofer Siêu Sâu S-900', price:5200000,
-   desc:'Loa sub cực kỳ mạnh mẽ, độ sâu âm thấp tuyệt vời, phù hợp rạp hát tại gia.',
-   img:'https://images.unsplash.com/photo-1593611011665-4394d0e9cf6c?auto=format&fit=crop&w=500&q=60'},
-  {id:'dc12', name:'Loa Cột Di Động DC-12', price:7800000,
-   desc:'Loa cột di động tích hợp pin và micro, dễ dàng di chuyển, lý tưởng cho sự kiện outdoor.',
-   img:'https://images.unsplash.com/photo-1563296520-97b47d5a4b3a?auto=format&fit=crop&w=500&q=60'}
-];
-const P = Object.fromEntries(PRODUCTS.map(p=>[p.id,p]));
-const fmt = n => n.toLocaleString('vi-VN') + ' VNĐ';
-
-const FAULTS = [
-  {id:'nguon', label:'Loa không lên nguồn / không sáng đèn',
-   keywords:['khong len nguon','khong sang den','im lang','khong co tieng','khong bat duoc'],
-   causes:[
-    {name:'Adapter / dây nguồn hỏng', steps:['Thử adapter hoặc ổ cắm khác','Kiểm tra dây có đứt, gãy đầu cắm không'], fix:'Thay adapter đúng thông số (điện áp, dòng) ghi trên loa.'},
-    {name:'Board nguồn trong loa bị cháy', steps:['Nếu adapter tốt mà đèn vẫn không sáng, nghi ngờ board nguồn'], fix:'Cần kỹ thuật viên kiểm tra và thay board nguồn.'}],
-   level:'Trung bình', tech:true},
-  {id:'cot', label:'Loa kêu cót két, giòn âm, tiếng hở',
-   keywords:['keu cot','gion am','tieng ho','cot ket','keu re','bi re'],
-   causes:[
-    {name:'Cuộn dây (voice coil) loa treble hoặc bass bị rách / cọ', steps:['Hạ âm lượng, phát âm tần thấp rồi nghe xem tiếng cọ có phát ra từ củ loa nào','Nhấn nhẹ đều màng loa, nếu có tiếng cọ là nghi ngờ voice coil'], fix:'Thay củ loa hoặc quấn lại voice coil.'},
-    {name:'Board phân tần (crossover) bị lỗi', steps:['Quan sát linh kiện cháy xém, tụ phồng'], fix:'Thay linh kiện hoặc board phân tần.'},
-    {name:'Ốc / gioăng lỏng gây rung', steps:['Siết lại ốc củ loa, kiểm tra gioăng kín'], fix:'Siết ốc, dán lại gioăng.'}],
-   level:'Trung bình', tech:true},
-  {id:'meo', label:'Âm thanh méo, rè khi mở lớn',
-   keywords:['meo am','distortion','rung ranh','mo lon','bi meo'],
-   causes:[
-    {name:'Amply chạy quá công suất (clipping)', steps:['Giảm âm lượng còn khoảng 70% rồi nghe lại','Giảm bass/EQ boost nếu đang bật'], fix:'Dùng amply đủ công suất, không để volume sát max.'},
-    {name:'Màng loa bass bị lõm / rách', steps:['Quan sát màng loa dưới ánh sáng','Nhấn nhẹ viền màng, thấy rách hoặc biến dạng là hư'], fix:'Thay màng hoặc củ loa.'},
-    {name:'Nguồn tín hiệu kém', steps:['Thử nguồn phát và dây khác'], fix:'Thay dây, cổng kết nối.'}],
-   level:'Thấp – Trung bình', tech:false},
-  {id:'bt', label:'Bluetooth không kết nối / hay ngắt',
-   keywords:['bluetooth','khong ket noi','ngat ket noi','khong pair'],
-   causes:[
-    {name:'Loa chưa ở chế độ ghép đôi', steps:['Bật chế độ Pair (đèn nhấp nháy)','Xoá loa khỏi danh sách Bluetooth trên điện thoại rồi ghép lại'], fix:'Ghép đôi lại từ đầu.'},
-    {name:'Cần reset loa', steps:['Nhấn giữ nút nguồn khoảng 5 giây'], fix:'Reset và kết nối lại.'},
-    {name:'Module Bluetooth lỗi phần cứng', steps:['Nếu đã reset mà vẫn không kết nối với nhiều thiết bị khác nhau'], fix:'Thay module Bluetooth.'}],
-   level:'Thấp', tech:false}
-];
+/* ================= CẤU HÌNH ================= */
+// Khi đưa backend lên mạng, thay link bên dưới bằng link máy chủ của bạn.
+const PROD_API = 'https://TEN-APP-CUA-BAN.onrender.com';
+const API_BASE = ['localhost','127.0.0.1'].includes(location.hostname) ? 'http://localhost:3000' : PROD_API;
 
 /* ================= TIỆN ÍCH ================= */
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n).toLocaleString('vi-VN') + ' ₫';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
-const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function mdLite(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+const MAX_QTY = 20;
+const STATUS = {moi:'Đã tiếp nhận', da_xac_nhan:'Đã xác nhận', dang_giao:'Đang giao', hoan_tat:'Hoàn tất', huy:'Đã huỷ'};
+const FLOW = ['moi','da_xac_nhan','dang_giao','hoan_tat'];
 
-/* ================= RENDER SẢN PHẨM ================= */
-document.getElementById('yr').textContent = new Date().getFullYear();
-document.getElementById('productGrid').innerHTML = PRODUCTS.map(p => `
-  <div class="product-card">
-    <div class="product-img" style="background-image:url('${p.img}')"></div>
-    <div class="product-info">
-      <div><h3 class="product-title">${esc(p.name)}</h3><p class="product-desc">${esc(p.desc)}</p></div>
-      <div><div class="product-price">${fmt(p.price)}</div>
-      <button class="btn btn-primary" onclick="askAbout('${p.name}')">Tư vấn AI</button></div>
-    </div>
-  </div>`).join('');
-document.getElementById('dSym').innerHTML = FAULTS.map(f=>`<option value="${f.id}">${esc(f.label)}</option>`).join('');
-
-/* ================= TUỲ CHỈNH LOA ================= */
-function runConfigurator(){
-  const muc = cMuc.value, area = +cDienTich.value || 0, budget = (+cNganSach.value || 0) * 1e6, bass = cBass.value;
-  let picks = [], why = [];
-  if (muc==='outdoor'){ picks=['dc12']; why.push('Sự kiện ngoài trời cần loa di động, có pin và micro tích hợp, phù hợp DC-12.'); }
-  else if (muc==='rap' || bass==='manh'){ picks=['bt05','s900']; why.push('Kết hợp BT-05 (nghe rõ lời, âm trong) với S-900 (bass sâu) cho hiệu ứng rạp hát.'); }
-  else { picks=['bt05']; why.push(muc==='karaoke' ? 'BT-05 có Bluetooth 5.2, công suất 150W, hợp karaoke gia đình.' : 'BT-05 cho âm thanh trong vắt, bass cân bằng, phù hợp nghe nhạc.'); }
-  if (muc==='karaoke' && bass==='manh') why.push('Muốn bass mạnh khi hát, nên thêm sub S-900.');
-
-  const total = picks.reduce((s,id)=>s+P[id].price,0);
-  const within = total <= budget;
-  let html = `<h4>Gợi ý cho bạn</h4><ul>${picks.map(id=>`<li><strong>${esc(P[id].name)}</strong> – ${fmt(P[id].price)}</li>`).join('')}</ul>`;
-  html += `<p>Tổng: <strong>${fmt(total)}</strong> ${within?'<span class="tag" style="background:rgba(34,197,94,.2);color:#86efac">Trong ngân sách</span>':'<span class="tag warn">Vượt ngân sách</span>'}</p><ul style="margin-top:10px">${why.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`;
-  if (!within){
-    const alt = PRODUCTS.filter(p=>p.price<=budget).sort((a,b)=>b.price-a.price)[0];
-    html += `<div class="callout">${alt ? `Với ngân sách hiện tại, bạn có thể bắt đầu với <strong>${esc(alt.name)}</strong> và nâng cấp thêm sau.` : 'Ngân sách hiện tại thấp hơn mẫu rẻ nhất của chúng tôi.'}</div>`;
+async function api(path, {method='GET', body} = {}){
+  let res;
+  try{
+    res = await fetch(API_BASE + path, body
+      ? {method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}
+      : {method});
+  }catch(e){
+    const err = new Error('Không kết nối được máy chủ. Kiểm tra backend đã chạy chưa rồi thử lại.');
+    err.offline = true; throw err;
   }
-  if (area > 40) html += `<div class="callout">Phòng lớn (${area} m²): nên hỏi AI hoặc kỹ thuật viên để xác nhận công suất có đủ không, vì dữ liệu mẫu chưa có thông số độ phủ âm.</div>`;
-  html += `<button class="btn btn-primary" style="margin-top:14px" onclick="quick('Tôi cần loa cho mục đích ${cMuc.options[cMuc.selectedIndex].text}, phòng ${area}m², ngân sách ${cNganSach.value} triệu. Bạn tư vấn giúp.')">Hỏi AI để tinh chỉnh</button>`;
-  const r = document.getElementById('cResult'); r.innerHTML = html; r.style.display='block';
+  let data = null;
+  try{ data = await res.json(); }catch(e){}
+  if(!res.ok){ const err = new Error((data && data.error) || ('Lỗi ' + res.status)); err.status = res.status; throw err; }
+  return data;
 }
 
-/* ================= CHẨN ĐOÁN ================= */
+function toast(msg, type){
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || '');
+  t.textContent = msg;
+  $('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+/* ===== khoá cuộn trang khi mở giỏ/hộp thoại ===== */
+let locks = 0;
+const lock = () => { if(++locks === 1) document.body.style.overflow = 'hidden'; };
+const unlock = () => { if(--locks <= 0){ locks = 0; document.body.style.overflow = ''; } };
+
+/* ================= SẢN PHẨM ================= */
+let products = [];
+const byId = id => products.find(p => p.id === id);
+const maxFor = p => Math.max(0, Math.min(MAX_QTY, p.stock));
+
+function stockTag(p){
+  if(!p.inStock) return '<span class="stock-tag out">Hết hàng</span>';
+  if(p.stock <= 5) return `<span class="stock-tag low">Chỉ còn ${p.stock}</span>`;
+  return '<span class="stock-tag">Còn hàng</span>';
+}
+const CATS = {'': 'Tất cả', 'dan-karaoke': 'Dàn karaoke', 'karaoke-di-dong': 'Loa karaoke di động', 'xach-tay': 'Loa xách tay'};
+let pCat = '';
+function imgHtml(p, cls){
+  return p.img ? `<img ${cls ? `class="${cls}" ` : ''}src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" data-ph="${esc(p.model || p.name)}">`
+               : `<div class="ph">${esc(p.model || p.name)}</div>`;
+}
+// ảnh chưa có/ lỗi thì hiện khung chữ thay thế
+document.addEventListener('error', e => {
+  const t = e.target;
+  if(t && t.tagName === 'IMG' && t.dataset.ph){
+    const d = document.createElement('div'); d.className = 'ph'; d.textContent = t.dataset.ph; t.replaceWith(d);
+  }
+}, true);
+function visibleProducts(){
+  const q = norm($('pSearch').value.trim());
+  let list = products.filter(p => (!pCat || p.category === pCat) && (!q || norm(p.name + ' ' + (p.model || '')).includes(q)));
+  const so = $('pSort').value;
+  if(so) list = [...list].sort((a,b) => so === 'asc' ? a.price - b.price : b.price - a.price);
+  return list;
+}
+function renderTabs(){
+  $('catTabs').innerHTML = Object.entries(CATS).map(([k,v]) =>
+    `<button class="tab ${k === pCat ? 'on' : ''}" data-act="cat" data-cat="${esc(k)}" role="tab" aria-selected="${k === pCat}">${esc(v)}</button>`).join('');
+}
+let cmp = [];
+function chipsOf(p){
+  const c = [];
+  if(p.watt) c.push(p.watt[0] === p.watt[1] ? p.watt[0] + 'W' : p.watt.join('-') + 'W');
+  if(p.bassCm) c.push('Bass ' + p.bassCm + 'cm');
+  const bt = (p.specs || {})['Bluetooth']; if(bt) c.push('BT ' + bt);
+  const mic = (p.specs || {})['Micro']; if(mic && /UHF|không dây/i.test(mic)) c.push('Micro');
+  return c.map(x => `<span>${esc(x)}</span>`).join('');
+}
+function renderProducts(){
+  renderTabs();
+  const list = visibleProducts();
+  if(!list.length){ $('productGrid').innerHTML = '<p class="state">Không có sản phẩm phù hợp. Thử từ khoá hoặc nhóm khác.</p>'; return; }
+  $('productGrid').innerHTML = list.map(p => `<div class="product-card">
+      <div class="product-img" data-act="detail" data-id="${esc(p.id)}" style="cursor:pointer">${imgHtml(p)}${stockTag(p)}</div>
+      <div class="product-info">
+        <div><h3 class="product-title">${esc(p.name)}</h3><div class="chipline">${chipsOf(p)}</div><p class="product-desc">${esc(p.desc)}</p></div>
+        <div><div class="product-price">${fmt(p.price)}</div>
+        <label class="cmp"><input type="checkbox" data-act="cmp" data-id="${esc(p.id)}" ${cmp.includes(p.id) ? 'checked' : ''}> So sánh</label>
+        <div class="btn-row">
+          <button class="btn btn-primary" data-act="add" data-id="${esc(p.id)}" ${p.inStock ? '' : 'disabled'}><i class="fas fa-cart-plus"></i> ${p.inStock ? 'Thêm vào giỏ' : 'Hết hàng'}</button>
+          <button class="btn btn-ghost" data-act="detail" data-id="${esc(p.id)}">Chi tiết</button>
+        </div></div>
+      </div></div>`).join('');
+}
+function cmpBar(){
+  $('cmpBar').classList.toggle('show', cmp.length > 0);
+  $('cmpTxt').textContent = `Đã chọn ${cmp.length}/3 loa`;
+}
+function openCompare(){
+  const ps = cmp.map(byId).filter(Boolean);
+  if(ps.length < 2){ toast('Hãy chọn ít nhất 2 loa để so sánh.', 'err'); return; }
+  const keys = [...new Set(ps.flatMap(p => Object.keys(p.specs || {})))];
+  const row = (label, f) => `<tr><td>${esc(label)}</td>${ps.map(p => `<td>${f(p)}</td>`).join('')}</tr>`;
+  openModal('So sánh sản phẩm', `<div class="cmp-wrap"><table class="cmp-table"><thead><tr><th></th>${ps.map(p => `<th>${esc(p.model || p.name)}</th>`).join('')}</tr></thead><tbody>
+    ${row('Giá', p => `<strong>${fmt(p.price)}</strong>`)}
+    ${row('Tình trạng', p => p.inStock ? 'Còn hàng' : 'Hết hàng')}
+    ${keys.map(k => row(k, p => esc((p.specs || {})[k] || '—'))).join('')}
+    ${row('', p => `<button class="btn btn-primary btn-sm" data-act="add" data-id="${esc(p.id)}" ${p.inStock ? '' : 'disabled'}>Thêm vào giỏ</button>`)}
+  </tbody></table></div>`);
+  const box = document.querySelector('.modal-box'); if(box) box.style.width = 'min(900px,100%)';
+}
+function openDetail(id){
+  const p = byId(id); if(!p) return;
+  const rows = Object.entries(p.specs || {}).map(([k,v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('');
+  openModal(p.name, `${p.img ? imgHtml(p, 'detail-img') : ''}
+    <p>${esc(p.desc)}</p>
+    ${(p.features || []).length ? `<ul style="padding-left:20px;margin:8px 0;color:#d6cdbd">${p.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}
+    ${rows ? `<table class="dtable"><tbody>${rows}</tbody></table>` : ''}
+    <div class="product-price">${fmt(p.price)}</div>
+    <div class="actions"><button class="btn btn-primary" data-act="add" data-id="${esc(p.id)}" ${p.inStock ? '' : 'disabled'}>${p.inStock ? 'Thêm vào giỏ' : 'Hết hàng'}</button>
+    <button class="btn btn-ghost" data-act="ask" data-id="${esc(p.id)}">Tư vấn AI</button></div>`);
+}
+$('pSearch').addEventListener('input', renderProducts);
+$('pSort').addEventListener('change', renderProducts);
+async function loadProducts(quiet){
+  if(!quiet) $('productGrid').innerHTML = '<p class="state">Đang tải sản phẩm...</p>';
+  try{
+    products = await api('/api/products');
+    renderProducts();
+    reconcileCart(quiet);
+  }catch(e){
+    if(!quiet) $('productGrid').innerHTML = `<div class="state error">${esc(e.message)}<br><br><button class="btn btn-ghost" data-act="reload">Thử lại</button></div>`;
+  }
+}
+
+/* ================= GIỎ HÀNG ================= */
+let cart = {};
+(function loadCart(){
+  try{
+    const o = JSON.parse(store.get('htl_cart') || '{}');
+    if(o && typeof o === 'object') for(const [id,q] of Object.entries(o)) if(Number.isInteger(q) && q > 0) cart[id] = Math.min(q, MAX_QTY);
+  }catch(e){ cart = {}; }
+})();
+const saveCart = () => store.set('htl_cart', JSON.stringify(cart));
+const cartLines = () => Object.entries(cart).map(([id,qty]) => ({p: byId(id), qty})).filter(l => l.p);
+const cartCount = () => cartLines().reduce((s,l) => s + l.qty, 0);
+const cartTotal = () => cartLines().reduce((s,l) => s + l.p.price * l.qty, 0);
+
+// Đồng bộ giỏ với tồn kho thật từ server
+function reconcileCart(announce){
+  let changed = false;
+  for(const [id,q] of Object.entries(cart)){
+    const p = byId(id);
+    if(!p || p.stock <= 0){ delete cart[id]; changed = true; }
+    else if(q > maxFor(p)){ cart[id] = maxFor(p); changed = true; }
+  }
+  if(changed){ saveCart(); if(announce) toast('Giỏ hàng đã được cập nhật theo tồn kho.', 'err'); }
+  renderCart();
+}
+function addToCart(id, n = 1, silent){
+  const p = byId(id);
+  if(!p || !p.inStock){ toast('Sản phẩm này hiện đã hết hàng.', 'err'); return false; }
+  const cur = cart[id] || 0, max = maxFor(p);
+  if(cur >= max){ toast(`Bạn đã có tối đa ${max} sản phẩm này trong giỏ.`, 'err'); return false; }
+  cart[id] = Math.min(max, cur + n);
+  saveCart(); renderCart(true);
+  if(!silent) toast(`Đã thêm "${p.name}" vào giỏ.`, 'ok');
+  return true;
+}
+function setQty(id, q){
+  const p = byId(id); if(!p) return;
+  if(q < 1){ delete cart[id]; }
+  else if(q > maxFor(p)){ cart[id] = maxFor(p); toast(`Chỉ còn ${p.stock} sản phẩm.`, 'err'); }
+  else cart[id] = q;
+  saveCart(); renderCart();
+}
+function renderCart(bump){
+  const count = cartCount(), badge = $('cartBadge');
+  badge.textContent = count; badge.classList.toggle('show', count > 0);
+  if(bump){ badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump'); }
+  const lines = cartLines();
+  if(!lines.length){
+    $('cartBody').innerHTML = '<div class="empty"><i class="fas fa-cart-shopping"></i><p>Giỏ hàng đang trống.</p><br><button class="btn btn-primary btn-sm" data-act="close-cart" data-go="#products">Xem sản phẩm</button></div>';
+    $('cartFoot').innerHTML = '';
+    return;
+  }
+  $('cartBody').innerHTML = lines.map(({p,qty}) => `<div class="cart-item">
+    <img src="${esc(p.img || '')}" alt="">
+    <div><div class="ci-name">${esc(p.name)}</div><div class="ci-price">${fmt(p.price)}</div>
+      <div class="qty"><button data-act="dec" data-id="${esc(p.id)}" aria-label="Giảm số lượng">−</button><span>${qty}</span><button data-act="inc" data-id="${esc(p.id)}" aria-label="Tăng số lượng">+</button></div></div>
+    <div class="ci-right"><div class="ci-line">${fmt(p.price * qty)}</div><button class="ci-del" data-act="del" data-id="${esc(p.id)}">Xoá</button></div>
+  </div>`).join('');
+  $('cartFoot').innerHTML = `<div class="total-row"><span>Tạm tính</span><span>${fmt(cartTotal())}</span></div>
+    <button class="btn btn-primary btn-block" data-act="checkout">Tiến hành đặt hàng</button>
+    <p class="hint">Chưa cần thanh toán, nhân viên sẽ gọi xác nhận đơn.</p>`;
+}
+function openCart(){
+  $('overlay').classList.add('open'); $('drawer').classList.add('open'); $('drawer').setAttribute('aria-hidden','false');
+  lock(); loadProducts(true); // làm mới tồn kho mỗi lần mở giỏ
+}
+function closeCart(){
+  if(!$('drawer').classList.contains('open')) return;
+  $('overlay').classList.remove('open'); $('drawer').classList.remove('open'); $('drawer').setAttribute('aria-hidden','true');
+  unlock();
+}
+
+/* ================= HỘP THOẠI ================= */
+let modalOpen = false, lastFocus = null;
+function openModal(title, html){
+  const mb = document.querySelector('.modal-box'); if(mb) mb.style.width = '';
+  $('modalTitle').textContent = title; $('modalBody').innerHTML = html;
+  if(!modalOpen){ modalOpen = true; lastFocus = document.activeElement; lock(); }
+  $('modal').classList.add('open'); $('modal').setAttribute('aria-hidden','false');
+  const f = $('modalBody').querySelector('input:not([type=hidden]),textarea,select');
+  if(f) setTimeout(() => f.focus(), 30);
+}
+function closeModal(){
+  if(!modalOpen) return;
+  modalOpen = false; $('modal').classList.remove('open'); $('modal').setAttribute('aria-hidden','true');
+  unlock(); if(lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+/* ================= ĐẶT HÀNG ================= */
+function summaryHtml(){
+  return cartLines().map(({p,qty}) => `<div><span>${esc(p.name)} × ${qty}</span><span>${fmt(p.price*qty)}</span></div>`).join('')
+    + `<div class="t"><span>Tổng cộng</span><span>${fmt(cartTotal())}</span></div>`;
+}
+function openCheckout(){
+  if(!cartLines().length){ toast('Giỏ hàng đang trống.', 'err'); return; }
+  closeCart();
+  const last = JSON.parse(store.get('htl_customer') || '{}');
+  openModal('Thông tin đặt hàng', `<form id="coForm">
+    <div class="co-sum" id="coSum">${summaryHtml()}</div>
+    <div class="field"><label for="coName">Họ tên</label><input id="coName" type="text" required minlength="2" maxlength="80" autocomplete="name" value="${esc(last.name)}"></div>
+    <div class="field"><label for="coPhone">Số điện thoại</label><input id="coPhone" type="tel" inputmode="tel" required maxlength="20" placeholder="0912345678" autocomplete="tel" value="${esc(last.phone)}"></div>
+    <div class="field"><label for="coAddr">Địa chỉ nhận hàng</label><input id="coAddr" type="text" required minlength="8" maxlength="200" autocomplete="street-address" value="${esc(last.address)}"></div>
+    <div class="field"><label for="coNote">Ghi chú (không bắt buộc)</label><textarea id="coNote" maxlength="300" placeholder="Ví dụ: giao giờ hành chính"></textarea></div>
+    <div class="form-error" id="coErr" role="alert"></div>
+    <button class="btn btn-primary btn-block" id="coBtn" type="submit">Đặt hàng</button>
+    <p class="hint">Nhân viên sẽ gọi điện xác nhận đơn. Bạn có thể trả khi nhận hàng.</p>
+  </form>`);
+  $('coForm').addEventListener('submit', submitOrder);
+}
+let payInfo = {enabled: false};
+api('/api/payment-info').then(p => { if(p && p.enabled) payInfo = p; }).catch(() => {});
+function payHtml(o){
+  const p = payInfo;
+  if(!p.enabled || !/^[A-Za-z0-9]{2,12}$/.test(p.bank) || !/^\d{4,20}$/.test(p.accountNo)) return '';
+  const qr = `https://img.vietqr.io/image/${p.bank}-${p.accountNo}-compact2.png?amount=${Number(o.total)}&addInfo=${encodeURIComponent(o.code)}&accountName=${encodeURIComponent(p.accountName || '')}`;
+  const row = (k, v) => `<tr><td>${k}</td><td><strong>${esc(v)}</strong> <button class="btn btn-ghost btn-sm" data-act="copy" data-text="${esc(v)}" aria-label="Sao chép ${k}"><i class="fas fa-copy"></i></button></td></tr>`;
+  return `<div class="pay"><h4>Chuyển khoản (không bắt buộc)</h4>
+    <img src="${esc(qr)}" alt="Mã QR chuyển khoản cho đơn ${esc(o.code)}" width="220" height="220" onerror="this.style.display='none'">
+    <table><tbody>${row('Ngân hàng', p.bank)}${row('Số tài khoản', p.accountNo)}${p.accountName ? row('Chủ tài khoản', p.accountName) : ''}${row('Số tiền', String(o.total))}${row('Nội dung', o.code)}</tbody></table>
+    <p class="hint">Nhập đúng nội dung chuyển khoản để nhân viên đối soát. Đơn chỉ được xác nhận sau khi nhân viên kiểm tra. Bạn cũng có thể trả khi nhận hàng.</p></div>`;
+}
+async function submitOrder(e){
+  e.preventDefault();
+  const btn = $('coBtn'), err = $('coErr');
+  const payload = {
+    name: $('coName').value, phone: $('coPhone').value, address: $('coAddr').value, note: $('coNote').value,
+    items: cartLines().map(l => ({productId: l.p.id, qty: l.qty}))
+  };
+  err.textContent = ''; btn.disabled = true; btn.textContent = 'Đang gửi...';
+  try{
+    const o = await api('/api/orders', {method:'POST', body: payload});
+    cart = {}; saveCart(); renderCart();
+    store.set('htl_customer', JSON.stringify({name: payload.name, phone: payload.phone, address: payload.address}));
+    store.set('htl_last_order', JSON.stringify({code: o.code, phone: o.phone}));
+    $('tCode').value = o.code; $('tPhone').value = o.phone;
+    loadProducts(true);
+    $('modalTitle').textContent = 'Đặt hàng thành công';
+    $('modalBody').innerHTML = `<div class="success"><div class="big"><i class="fas fa-circle-check"></i></div>
+      <p>Mã đơn hàng của bạn</p><div class="code" id="okCode">${esc(o.code)}</div>
+      <button class="btn btn-ghost btn-sm" data-act="copy" data-text="${esc(o.code)}"><i class="fas fa-copy"></i> Sao chép mã</button>
+      <p style="margin-top:14px">Tổng tiền: <strong>${fmt(o.total)}</strong></p>
+      ${payHtml(o)}
+      <p class="hint">Nhân viên sẽ gọi vào số ${esc(o.phone)} để xác nhận. Hãy lưu mã đơn để tra cứu về sau.</p>
+      <div class="actions" style="justify-content:center"><button class="btn btn-primary" data-act="goto-track">Xem trạng thái đơn</button><button class="btn btn-ghost" data-act="close-modal">Đóng</button></div></div>`;
+  }catch(ex){
+    err.textContent = ex.message;
+    btn.disabled = false; btn.textContent = 'Đặt hàng';
+    if(ex.status === 409){ await loadProducts(true); if(!cartLines().length){ closeModal(); } else { $('coSum').innerHTML = summaryHtml(); } }
+  }
+}
+
+/* ================= TRA CỨU ĐƠN ================= */
+function orderHtml(o){
+  const flowIdx = FLOW.indexOf(o.status);
+  const steps = o.status === 'huy' ? '' : `<div class="steps">${FLOW.map((s,i) => `<div class="step ${i <= flowIdx ? 'done' : ''}">${STATUS[s]}</div>`).join('')}</div>`;
+  const tag = o.status === 'huy' ? 'bad' : (o.status === 'hoan_tat' ? 'ok' : '');
+  return `<h4>Đơn ${esc(o.code)} <span class="tag ${tag}">${STATUS[o.status] || esc(o.status)}</span></h4>${steps}
+    <table class="items-table"><thead><tr><th>Sản phẩm</th><th>SL</th><th>Thành tiền</th></tr></thead><tbody>
+    ${o.items.map(i => `<tr><td>${esc(i.name)}</td><td>${i.qty}</td><td>${fmt(i.unitPrice * i.qty)}</td></tr>`).join('')}
+    <tr><td colspan="2"><strong>Tổng cộng</strong></td><td><strong>${fmt(o.total)}</strong></td></tr></tbody></table>
+    <dl class="kv"><dt>Người nhận</dt><dd>${esc(o.name)}</dd><dt>Điện thoại</dt><dd>${esc(o.phone)}</dd><dt>Địa chỉ</dt><dd>${esc(o.address)}</dd>${o.note ? `<dt>Ghi chú</dt><dd>${esc(o.note)}</dd>` : ''}<dt>Đặt lúc</dt><dd>${esc(new Date(o.createdAt).toLocaleString('vi-VN'))}</dd></dl>`;
+}
+$('trackForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('tGo'), err = $('tErr'), box = $('tResult');
+  err.textContent = ''; box.style.display = 'none'; btn.disabled = true; btn.textContent = 'Đang tra cứu...';
+  try{
+    const o = await api(`/api/orders/${encodeURIComponent($('tCode').value.trim())}?phone=${encodeURIComponent($('tPhone').value.trim())}`);
+    box.innerHTML = orderHtml(o); box.style.display = 'block';
+  }catch(ex){ err.textContent = ex.message; }
+  finally{ btn.disabled = false; btn.textContent = 'Tra cứu'; }
+});
+try{ const lo = JSON.parse(store.get('htl_last_order') || 'null'); if(lo){ $('tCode').value = lo.code || ''; $('tPhone').value = lo.phone || ''; } }catch(e){}
+
+/* ================= TUỲ CHỈNH LOA (do server gợi ý) ================= */
+$('cGo').addEventListener('click', async () => {
+  const btn = $('cGo'), r = $('cResult');
+  btn.disabled = true;
+  try{
+    const d = await api('/api/recommend', {method:'POST', body:{
+      purpose: $('cMuc').value, area: +$('cDienTich').value || 0, budgetMillion: +$('cNganSach').value || 0, bass: $('cBass').value}});
+    if(!d.items.length){ r.innerHTML = d.notes.map(n => `<div class="callout">${esc(n)}</div>`).join(''); r.style.display = 'block'; return; }
+    let html = `<h4>Gợi ý cho bạn</h4>` + d.items.map((p,i) => `<div class="rec ${i === 0 ? 'main' : ''}">
+      <span class="tag ${i === 0 ? 'ok' : ''}">${esc(p.role)}</span> <strong>${esc(p.name)}</strong>
+      <p style="color:#d6cdbd;font-size:.88rem;margin-top:6px">${esc(p.reason)}</p>
+      <div class="row"><span class="product-price" style="margin:0">${fmt(p.price)}</span>
+      <span><button class="btn btn-primary" data-act="add" data-id="${esc(p.id)}"><i class="fas fa-cart-plus"></i> Thêm vào giỏ</button>
+      <button class="btn btn-ghost" data-act="detail" data-id="${esc(p.id)}">Chi tiết</button></span></div></div>`).join('');
+    html += `<p>${d.withinBudget ? '<span class="tag ok">Phương án chính nằm trong ngân sách</span>' : '<span class="tag warn">Ngoài ngân sách</span>'}</p>`;
+    html += `<ul style="margin-top:10px">${d.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul>`;
+    html += d.notes.map(n => `<div class="callout">${esc(n)}</div>`).join('');
+    html += `<div class="actions"><button class="btn btn-ghost" data-act="ask-config">Hỏi AI để tinh chỉnh</button></div>`;
+    r.innerHTML = html; r.style.display = 'block';
+  }catch(ex){ r.innerHTML = `<div class="callout">${esc(ex.message)}</div>`; r.style.display = 'block'; }
+  finally{ btn.disabled = false; }
+});
+
+/* ================= CHẨN ĐOÁN SỰ CỐ ================= */
+let faultList = [];
+async function loadFaults(){
+  try{
+    faultList = await api('/api/faults');
+    $('dSym').innerHTML = faultList.map(f => `<option value="${esc(f.id)}">${esc(f.label)}</option>`).join('');
+  }catch(e){ $('dSym').innerHTML = '<option value="">Không tải được danh sách (backend chưa chạy?)</option>'; }
+}
 function renderFault(f){
-  return `<h4>${esc(f.label)}</h4><p><span class="tag">Mức độ: ${esc(f.level)}</span>${f.tech?'<span class="tag warn">Nên nhờ kỹ thuật viên</span>':''}</p>
-  <p style="margin:10px 0;color:#94a3b8">Nguyên nhân có thể, kiểm tra từ trên xuống:</p>` +
-  f.causes.map((c,i)=>`<div class="cause"><strong>${i+1}. ${esc(c.name)}</strong>
-    <ul style="margin-top:6px">${c.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
+  return `<h4>${esc(f.label)}</h4><p><span class="tag">Mức độ: ${esc(f.level)}</span>${f.tech ? '<span class="tag warn">Nên nhờ kỹ thuật viên</span>' : ''}</p>
+  <p style="margin:10px 0;color:#a39a8b">Nguyên nhân có thể, kiểm tra từ trên xuống:</p>` +
+  f.causes.map((c,i) => `<div class="cause"><strong>${i+1}. ${esc(c.name)}</strong>
+    <ul style="margin-top:6px">${c.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
     <div>Cách khắc phục: ${esc(c.fix)}</div></div>`).join('') +
-  `<div class="callout">An toàn: rút điện trước khi tháo loa. Tụ điện trong board nguồn/amply có thể còn tích điện, nếu không có kinh nghiệm hãy đưa đến nơi bảo hành.</div>`;
+  `<div class="callout">An toàn: rút điện trước khi tháo loa. Tụ điện trong board nguồn/amply có thể còn tích điện, nếu không có kinh nghiệm hãy đưa đến nơi bảo hành.</div>
+  <div class="actions"><button class="btn btn-primary" data-act="support" data-fault="${esc(f.id)}"><i class="fas fa-screwdriver-wrench"></i> Nhờ kỹ thuật viên hỗ trợ</button></div>`;
 }
-function runDiagnose(){
-  const f = FAULTS.find(x=>x.id===dSym.value);
-  const r = document.getElementById('dResult'); r.innerHTML = renderFault(f); r.style.display='block';
-}
-function localDiagnose(q){
-  const n = norm(q);
-  const f = FAULTS.find(f=>f.keywords.some(k=>n.includes(k)));
-  if(!f) return null;
-  return `**${f.label}**\n` + f.causes.map((c,i)=>`${i+1}. **${c.name}**\n   Kiểm tra: ${c.steps.join('; ')}.\n   Khắc phục: ${c.fix}`).join('\n') +
-    `\n\nLưu ý: rút điện trước khi tháo loa.${f.tech?' Nên nhờ kỹ thuật viên nếu bạn chưa có kinh nghiệm.':''}`;
-}
-
-/* ================= CHAT AI ================= */
-const MODEL = 'gemini-2.5-flash';
-// Demo: key lưu trong trình duyệt của người dùng. KHÔNG nhúng key vào mã khi đưa lên mạng.
-// Khi chạy thật, gọi qua server trung gian (xem ghi chú cuối file).
-const getKey = () => { try { return localStorage.getItem('gemini_key') || ''; } catch(e){ return ''; } };
-function setApiKey(){
-  const k = prompt('Nhập Gemini API key (chỉ lưu trên trình duyệt này):', getKey());
-  if (k !== null){ try{ localStorage.setItem('gemini_key', k.trim()); }catch(e){} }
+$('dGo').addEventListener('click', async () => {
+  const r = $('dResult'), id = $('dSym').value;
+  if(!id){ await loadFaults(); return; }
+  try{ r.innerHTML = renderFault(await api('/api/faults/' + encodeURIComponent(id))); }
+  catch(e){ r.innerHTML = `<div class="callout">${esc(e.message)}</div>`; }
+  r.style.display = 'block';
+});
+function faultText(f){
+  return `**${f.label}**\n` + f.causes.map((c,i) => `${i+1}. **${c.name}**\n   Kiểm tra: ${c.steps.join('; ')}.\n   Khắc phục: ${c.fix}`).join('\n') +
+    `\n\nLưu ý: rút điện trước khi tháo loa.${f.tech ? ' Nên nhờ kỹ thuật viên nếu bạn chưa có kinh nghiệm.' : ''}`;
 }
 
-const SYSTEM_PROMPT = `Bạn là kỹ thuật viên kiêm tư vấn bán hàng của "Hệ Thống Loa". Trả lời tiếng Việt, thân thiện, ngắn gọn, dùng tối đa 1-2 emoji.
-Hai nhiệm vụ:
-1) Tư vấn chọn/tuỳ chỉnh loa: hỏi khi thiếu thông tin (mục đích, diện tích phòng, ngân sách, mức bass), rồi đề xuất từ danh mục.
-2) Chẩn đoán sự cố: hỏi triệu chứng cụ thể, nêu 2-3 nguyên nhân có thể xếp theo khả năng, cách tự kiểm tra an toàn, hướng khắc phục, và khi nào nên mang đi sửa. Luôn nhắc rút điện trước khi tháo loa. Không khẳng định chắc chắn khi chưa kiểm tra trực tiếp.
-Danh mục sản phẩm (chỉ dùng đúng thông tin này):
-- Loa Bookshelf Karaoke BT-05 (3.500.000đ): Bluetooth 5.2, 150W, âm trong vắt, bass mạnh.
-- Loa Subwoofer S-900 (5.200.000đ): bass sâu, mạnh, hợp rạp hát tại gia.
-- Loa Cột Di Động DC-12 (7.800.000đ): tích hợp pin và micro, di động, hợp sự kiện ngoài trời.
-Không bịa thông số kỹ thuật, bảo hành hay khuyến mãi không có ở trên; nếu thiếu dữ liệu, nói rõ và gợi ý liên hệ hotline 1900.123.456.`;
+/* ================= YÊU CẦU HỖ TRỢ / BẢO HÀNH ================= */
+function openSupport(faultId){
+  const f = faultList.find(x => x.id === faultId);
+  const last = JSON.parse(store.get('htl_customer') || '{}');
+  const userMsgs = history.filter(m => m.role === 'user').map(m => m.text);
+  openModal('Gửi yêu cầu hỗ trợ / bảo hành', `<form id="spForm">
+    <div class="field"><label for="spName">Họ tên</label><input id="spName" type="text" required minlength="2" maxlength="80" autocomplete="name" value="${esc(last.name)}"></div>
+    <div class="field"><label for="spPhone">Số điện thoại</label><input id="spPhone" type="tel" inputmode="tel" required maxlength="20" placeholder="0912345678" autocomplete="tel" value="${esc(last.phone)}"></div>
+    <div class="field"><label for="spProd">Loa bị sự cố</label><select id="spProd"><option value="">Chưa rõ / sản phẩm khác</option>${products.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></div>
+    <div class="field"><label for="spSym">Mô tả sự cố</label><textarea id="spSym" required minlength="10" maxlength="1000" placeholder="Ví dụ: loa kêu rè khi mở lớn, đã thử giảm âm lượng vẫn bị...">${f ? esc(f.label + '. ') : ''}</textarea></div>
+    ${userMsgs.length ? '<div class="check"><input type="checkbox" id="spChat" checked><label for="spChat">Đính kèm nội dung đã trao đổi với AI</label></div>' : ''}
+    <input type="hidden" id="spFault" value="${esc(faultId || '')}">
+    <div class="form-error" id="spErr" role="alert"></div>
+    <button class="btn btn-primary btn-block" id="spBtn" type="submit">Gửi yêu cầu</button>
+    <p class="hint">Kỹ thuật viên sẽ liên hệ lại qua số điện thoại bạn nhập.</p>
+  </form>`);
+  $('spForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('spBtn'), err = $('spErr');
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Đang gửi...';
+    try{
+      const chk = $('spChat');
+      const r = await api('/api/support', {method:'POST', body:{
+        name: $('spName').value, phone: $('spPhone').value, symptom: $('spSym').value,
+        productId: $('spProd').value, faultId: $('spFault').value,
+        chatSummary: chk && chk.checked ? userMsgs.join(' | ').slice(0, 1900) : ''}});
+      store.set('htl_customer', JSON.stringify({...last, name: $('spName').value, phone: $('spPhone').value}));
+      $('modalTitle').textContent = 'Đã gửi yêu cầu';
+      $('modalBody').innerHTML = `<div class="success"><div class="big"><i class="fas fa-circle-check"></i></div>
+        <p>${esc(r.message)}</p><p class="hint">Mã yêu cầu: #${esc(r.id)}</p>
+        <div class="actions" style="justify-content:center"><button class="btn btn-primary" data-act="close-modal">Đóng</button></div></div>`;
+    }catch(ex){ err.textContent = ex.message; btn.disabled = false; btn.textContent = 'Gửi yêu cầu'; }
+  });
+}
 
+/* ================= XỬ LÝ NÚT BẤM (ủy quyền sự kiện) ================= */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if(!el) return;
+  const act = el.dataset.act, id = el.dataset.id;
+  switch(act){
+    case 'add': addToCart(id); break;
+    case 'detail': openDetail(id); break;
+    case 'cmp': {
+      if(el.checked){ if(cmp.length >= 3){ el.checked = false; toast('Chỉ so sánh tối đa 3 loa.', 'err'); break; } cmp.push(id); }
+      else cmp = cmp.filter(x => x !== id);
+      cmpBar(); break; }
+    case 'cmp-open': openCompare(); break;
+    case 'cmp-clear': cmp = []; cmpBar(); renderProducts(); break;
+    case 'fb': sendFeedback(el); break;
+    case 'cat': pCat = el.dataset.cat || ''; renderProducts(); break;
+    case 'ask': { const p = byId(id); if(p) quick(`Giúp tôi tư vấn về sản phẩm ${p.name}.`); break; }
+    case 'reload': loadProducts(); break;
+    case 'open-cart': openCart(); break;
+    case 'close-cart': closeCart(); if(el.dataset.go) location.hash = el.dataset.go; break;
+    case 'inc': setQty(id, (cart[id] || 0) + 1); break;
+    case 'dec': setQty(id, (cart[id] || 0) - 1); break;
+    case 'del': setQty(id, 0); break;
+    case 'checkout': openCheckout(); break;
+    case 'close-modal': closeModal(); break;
+    case 'copy': { try{ navigator.clipboard.writeText(el.dataset.text).then(() => toast('Đã sao chép.', 'ok')); }catch(ex){ toast('Không sao chép được, hãy chép tay.', 'err'); } break; }
+    case 'goto-track': closeModal(); $('tGo').click(); location.hash = '#track'; break;
+    case 'support': openSupport(el.dataset.fault || ''); break;
+    case 'add-all': { let n = 0; el.dataset.ids.split(',').forEach(pid => { if(addToCart(pid, 1, true)) n++; }); if(n){ toast(`Đã thêm ${n} sản phẩm vào giỏ.`, 'ok'); openCart(); } break; }
+    case 'ask-config': quick(`Tôi cần loa cho mục đích ${$('cMuc').selectedOptions[0].text}, phòng ${$('cDienTich').value}m², ngân sách ${$('cNganSach').value} triệu. Bạn tư vấn giúp.`); break;
+  }
+});
+$('modal').addEventListener('mousedown', e => { if(e.target === $('modal')) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ if(modalOpen) closeModal(); else closeCart(); } });
+
+/* ================= PHẢN HỒI VỀ CÂU TRẢ LỜI CỦA AI ================= */
+async function sendFeedback(btn){
+  const box = btn.closest('.fb'); if(!box) return;
+  const helpful = btn.dataset.v === '1';
+  box.textContent = 'Đang gửi...';
+  try{
+    await api('/api/feedback', {method:'POST', body:{helpful, question: box.dataset.q, answer: box.dataset.a}});
+    box.textContent = helpful ? 'Cảm ơn bạn!' : 'Cảm ơn, mình sẽ cải thiện. Bạn có thể nhờ kỹ thuật viên hỗ trợ trực tiếp.';
+  }catch(e){ box.textContent = 'Không gửi được phản hồi.'; }
+}
+
+/* ================= CHAT AI (gọi qua backend) ================= */
 let history = [];
 function greet(){
-  const box = document.getElementById('chatOutput'); box.innerHTML='';
+  $('chatOutput').innerHTML = '';
   addMsg('Chào bạn! Mình có thể giúp bạn:\n1️⃣ Chọn và tuỳ chỉnh loa theo không gian, ngân sách.\n2️⃣ Chẩn đoán loa hư và hướng dẫn khắc phục.\n\nBạn đang cần gì?', false);
   history = [];
 }
 function toggleChat(){
-  const w = chatWindow, b = chatToggleBtn;
+  const w = $('chatWindow'), b = $('chatToggleBtn');
   const open = w.style.display === 'flex';
   w.style.display = open ? 'none' : 'flex';
   b.style.display = open ? 'flex' : 'none';
-  if(!open) chatInput.focus();
+  if(!open) $('chatInput').focus();
 }
-function resetChat(){ greet(); chips.style.display='flex'; }
+function resetChat(){ greet(); $('chips').style.display = 'flex'; }
 function addMsg(text, isUser){
   const d = document.createElement('div');
-  d.className = 'msg ' + (isUser?'msg-user':'msg-ai');
+  d.className = 'msg ' + (isUser ? 'msg-user' : 'msg-ai');
   d.innerHTML = mdLite(text);
-  chatOutput.appendChild(d); chatOutput.scrollTop = chatOutput.scrollHeight;
+  $('chatOutput').appendChild(d); $('chatOutput').scrollTop = $('chatOutput').scrollHeight;
   return d;
 }
-function quick(t){ if(chatWindow.style.display!=='flex') toggleChat(); chatInput.value=t; sendChat(); }
-function askAbout(name){ quick(`Giúp tôi tư vấn về sản phẩm ${name}.`); }
+function quick(t){ if($('chatWindow').style.display !== 'flex') toggleChat(); $('chatInput').value = t; sendChat(); }
 
 let busy = false;
 async function sendChat(){
-  const text = chatInput.value.trim();
+  const text = $('chatInput').value.trim();
   if(!text || busy) return;
-  chatInput.value=''; chips.style.display='none';
+  $('chatInput').value = ''; $('chips').style.display = 'none';
   addMsg(text, true);
-
-  // Câu hỏi sự cố đã có trong cơ sở tri thức -> trả lời tức thì
-  const local = localDiagnose(text);
-  if(local){ addMsg(local,false); history.push({role:'user',parts:[{text}]},{role:'model',parts:[{text:local}]}); return; }
-
-  const key = getKey();
-  if(!key){ addMsg('Chưa có API key nên mình chưa trả lời được câu này bằng AI. Bấm biểu tượng 🔑 ở góc trên khung chat để nhập key, hoặc gọi hotline 1900.123.456.', false); return; }
 
   busy = true;
   const typing = addMsg('Đang suy nghĩ...', false);
-  history.push({role:'user',parts:[{text}]});
+  history.push({role:'user',text});
   try{
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-goog-api-key':key},
-      body: JSON.stringify({
-        systemInstruction:{parts:[{text:SYSTEM_PROMPT}]},
-        contents: history.slice(-12),
-        generationConfig:{temperature:0.5, maxOutputTokens:700}
-      })
-    });
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error?.message || res.status);
-    const ai = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Xin lỗi, mình chưa có phản hồi. Bạn thử diễn đạt lại nhé.';
-    typing.innerHTML = mdLite(ai);
-    history.push({role:'model',parts:[{text:ai}]});
+    const data = await api('/api/chat', {method:'POST', body:{messages: history.slice(-12)}});
+    const reply = data.reply || (data.fault ? faultText(data.fault) : 'Xin lỗi, mình chưa có phản hồi. Bạn thử diễn đạt lại nhé.');
+    typing.innerHTML = mdLite(reply);
+    if(Array.isArray(data.sources) && data.sources.length){
+      const box = document.createElement('div'); box.className = 'sources';
+      box.append('Nguồn tham khảo trên web:');
+      data.sources.forEach(sr => {
+        if(!/^https?:\/\//i.test(sr.url)) return;
+        const a = document.createElement('a'); a.href = sr.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = sr.title || sr.url;
+        box.appendChild(a);
+      });
+      typing.appendChild(box);
+    }
+    history.push({role:'model',text:reply});
+    if(data.reply){
+      const fb = document.createElement('div'); fb.className = 'fb';
+      fb.dataset.q = text.slice(0, 500); fb.dataset.a = reply.slice(0, 1500);
+      fb.innerHTML = 'Câu trả lời có ích không? <button data-act="fb" data-v="1" aria-label="Có ích">👍</button><button data-act="fb" data-v="0" aria-label="Chưa ổn">👎</button>';
+      typing.appendChild(fb);
+    }
   }catch(e){
     history.pop();
-    typing.textContent = 'Lỗi kết nối AI (' + e.message + '). Kiểm tra API key hoặc thử lại sau.';
-  }finally{ busy=false; chatOutput.scrollTop = chatOutput.scrollHeight; }
+    typing.textContent = e.offline ? e.message : ('Lỗi: ' + e.message);
+  }finally{ busy = false; $('chatOutput').scrollTop = $('chatOutput').scrollHeight; }
 }
+
+/* ================= KHỞI ĐỘNG ================= */
+$('yr').textContent = new Date().getFullYear();
 greet();
+renderCart();
+loadProducts();
+loadFaults();
+// Hiện thông báo "giá demo" nếu server đang ở chế độ demo (đặt DEMO_MODE=0 trong .env để tắt)
+api('/api/health').then(h => { if(h && h.demo) $('demoBar').hidden = false; }).catch(() => {});
 </script>
 </body>
 </html>

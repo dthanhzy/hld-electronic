@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Quản trị - HLD Electronic</title>
+<style>
+:root{--primary:#c9a24b;--bg:#121110;--card:#1f1c18;--border:rgba(255,255,255,.1);--text:#f3ece0;--gray:#a39a8b;--ok:#22c55e;--warn:#f59e0b;--danger:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:.95rem;background:rgba(0,0,0,.35);border:1px solid var(--border);color:#fff;padding:9px 11px;border-radius:8px;outline:none}
+input:focus,select:focus{border-color:var(--primary)}
+select option{background:#1b1814}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.4rem}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.btn{background:var(--primary);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:600;font-size:.9rem}
+.btn:hover:not(:disabled){filter:brightness(1.12)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.login{max-width:380px;margin:12vh auto;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px}
+.login h1{margin-bottom:6px}.login p{color:var(--gray);font-size:.9rem;margin-bottom:16px}
+.login input{width:100%;margin-bottom:12px}
+.err{color:#fca5a5;font-size:.88rem;min-height:1.3em;margin-bottom:8px}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid var(--border);color:var(--gray);padding:8px 16px;border-radius:20px;font-size:.9rem}
+.tab.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tools{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.tools span{color:var(--gray);font-size:.88rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.card-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.code{font-weight:800;letter-spacing:.5px}
+.muted{color:var(--gray);font-size:.85rem}
+.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:20px;background:rgba(201,162,75,.2);color:#e0c27a;margin-left:6px}
+.tag.ok{background:rgba(34,197,94,.2);color:#86efac}.tag.bad{background:rgba(239,68,68,.18);color:#fca5a5}.tag.warn{background:rgba(245,158,11,.18);color:#fbbf24}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}
+td,th{padding:5px 4px;border-bottom:1px solid var(--border);text-align:left}
+td:last-child,th:last-child{text-align:right}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.kv{font-size:.88rem;color:#d6cdbd}.kv b{color:var(--gray);font-weight:500}
+.empty{text-align:center;color:var(--gray);padding:40px 0}
+.stock{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stock input{width:100px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#2a251e;border:1px solid var(--border);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:50}
+.toast.err{border-color:var(--danger)}.toast.ok{border-color:var(--ok)}
+[hidden]{display:none!important}
+
+:root{--primary:#c9a24b}
+.btn,.tab.on{color:#17140f}
+body{background:#121110}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login" hidden>
+  <h1>Quản trị</h1>
+  <p>Đăng nhập bằng tài khoản nhân viên.</p>
+  <form id="loginForm">
+    <input id="uname" type="text" placeholder="Tên đăng nhập" autocomplete="username" required maxlength="30">
+    <input id="token" type="password" placeholder="Mật khẩu" autocomplete="current-password" required maxlength="100">
+    <div class="err" id="loginErr" role="alert"></div>
+    <button class="btn" style="width:100%" type="submit">Đăng nhập</button>
+  </form>
+</div>
+
+<div id="appView" class="wrap" hidden>
+  <div class="top">
+    <div><h1>Quản trị HLD Electronic</h1><div class="muted" id="who"></div></div>
+    <div class="row" style="margin:0"><button class="btn ghost" id="refresh">Làm mới</button><button class="btn ghost" id="logout">Đăng xuất</button></div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-tab="orders" role="tab">Đơn hàng <span id="cOrders"></span></button>
+    <button class="tab" data-tab="support" role="tab">Hỗ trợ / bảo hành <span id="cSupport"></span></button>
+    <button class="tab admin-only" data-tab="stock" role="tab">Tồn kho</button>
+    <button class="tab" data-tab="feedback" role="tab">Phản hồi AI <span id="cFb"></span></button>
+    <button class="tab admin-only" data-tab="staff" role="tab">Nhân viên</button>
+    <button class="tab admin-only" data-tab="audit" role="tab">Nhật ký</button>
+    <button class="tab" data-tab="account" role="tab">Tài khoản của tôi</button>
+  </div>
+  <div id="panel"></div>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+const API_BASE = ['localhost','127.0.0.1'].includes(location.hostname) ? 'http://localhost:3000' : 'https://TEN-APP-CUA-BAN.onrender.com';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Number(n).toLocaleString('vi-VN') + ' ₫';
+const ORDER_ST = {moi:'Mới', da_xac_nhan:'Đã xác nhận', dang_giao:'Đang giao', hoan_tat:'Hoàn tất', huy:'Đã huỷ'};
+const ORDER_FLOW = ['moi','da_xac_nhan','dang_giao','hoan_tat'];
+const SUP_ST = {moi:'Mới', dang_xu_ly:'Đang xử lý', da_xong:'Đã xong'};
+
+// Phiên đăng nhập chỉ giữ trong tab này (sessionStorage), đóng tab là mất.
+const tok = {
+  get(){ try{ return sessionStorage.getItem('hld_admin') || ''; }catch(e){ return ''; } },
+  set(v){ try{ sessionStorage.setItem('hld_admin', v); }catch(e){} },
+  clear(){ try{ sessionStorage.removeItem('hld_admin'); }catch(e){} }
+};
+const ACTIONS = {login:'Đăng nhập', logout:'Đăng xuất', login_failed:'Đăng nhập sai', login_locked:'Đăng nhập khi bị khoá', account_locked:'Tài khoản bị khoá', bootstrap:'Tạo tài khoản đầu tiên',
+  order_status:'Đổi trạng thái đơn', support_status:'Đổi trạng thái hỗ trợ', stock:'Sửa tồn kho', staff_create:'Tạo nhân viên', staff_update:'Sửa nhân viên', password_change:'Đổi mật khẩu'};
+const ROLES = {admin:'Quản trị viên', staff:'Nhân viên'};
+let token = tok.get(), tab = 'orders', filter = '', me = null, data = {orders: [], support: [], products: [], feedback: [], staff: [], audit: []};
+
+async function api(path, {method='GET', body} = {}){
+  let res;
+  try{
+    res = await fetch(API_BASE + path, {method, headers: {'Authorization': 'Bearer ' + token, ...(body ? {'Content-Type': 'application/json'} : {})}, body: body ? JSON.stringify(body) : undefined});
+  }catch(e){ const err = new Error('Không kết nối được máy chủ. Backend đã chạy chưa?'); err.offline = true; throw err; }
+  let d = null; try{ d = await res.json(); }catch(e){}
+  if(!res.ok){ const err = new Error((d && d.error) || ('Lỗi ' + res.status)); err.status = res.status; throw err; }
+  return d;
+}
+function toast(msg, type){
+  const t = $('toast'); t.textContent = msg; t.className = 'toast ' + (type || ''); t.hidden = false;
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2800);
+}
+
+function show(loggedIn){ $('loginView').hidden = loggedIn; $('appView').hidden = !loggedIn; }
+async function loadAll(){
+  try{
+    me = await api('/api/admin/me');
+    const isAdmin = me.role === 'admin';
+    const [o, s, p, f, st, au] = await Promise.all([api('/api/admin/orders'), api('/api/admin/support'), api('/api/products'), api('/api/admin/feedback'),
+      isAdmin ? api('/api/admin/staff') : [], isAdmin ? api('/api/admin/audit') : []]);
+    data = {orders: o, support: s, products: p, feedback: f, staff: st, audit: au};
+    $('who').textContent = me.username + ' · ' + ROLES[me.role];
+    document.querySelectorAll('.admin-only').forEach(t => t.hidden = !isAdmin);
+    if(!isAdmin && ['stock','staff','audit'].includes(tab)) tab = 'orders';
+    $('cFb').textContent = '(' + f.filter(x => !x.helpful).length + ' chưa ổn)';
+    $('cOrders').textContent = '(' + o.filter(x => x.status === 'moi').length + ' mới)';
+    $('cSupport').textContent = '(' + s.filter(x => x.status === 'moi').length + ' mới)';
+    show(true); render();
+  }catch(e){
+    if(e.status === 401){ tok.clear(); token = ''; me = null; show(false); $('loginErr').textContent = e.message; }
+    else toast(e.message, 'err');
+  }
+}
+
+/* ----- hiển thị ----- */
+function statusSelect(kind, key, cur, map, forward){
+  const opts = Object.entries(map).map(([k, label]) => `<option value="${k}" ${k === cur ? 'selected' : ''}>${label}</option>`).join('');
+  return `<select data-kind="${kind}" data-key="${esc(key)}" data-cur="${esc(cur)}" aria-label="Đổi trạng thái">${opts}</select>`;
+}
+function ordersHtml(){
+  const list = data.orders.filter(o => !filter || o.status === filter);
+  const bar = `<div class="tools"><span>Lọc:</span><select id="flt"><option value="">Tất cả</option>${Object.entries(ORDER_ST).map(([k, v]) => `<option value="${k}" ${filter === k ? 'selected' : ''}>${v}</option>`).join('')}</select><span>${list.length} đơn</span></div>`;
+  if(!list.length) return bar + '<div class="empty">Chưa có đơn hàng nào.</div>';
+  return bar + list.map(o => {
+    const tag = o.status === 'huy' ? 'bad' : o.status === 'hoan_tat' ? 'ok' : o.status === 'moi' ? 'warn' : '';
+    const done = o.status === 'huy' || o.status === 'hoan_tat';
+    return `<div class="card"><div class="card-head"><div><span class="code">${esc(o.code)}</span><span class="tag ${tag}">${ORDER_ST[o.status] || esc(o.status)}</span></div><span class="muted">${esc(new Date(o.created_at).toLocaleString('vi-VN'))}</span></div>
+      <div class="kv"><b>Khách:</b> ${esc(o.name)} · <b>SĐT:</b> ${esc(o.phone)}<br><b>Địa chỉ:</b> ${esc(o.address)}${o.note ? `<br><b>Ghi chú:</b> ${esc(o.note)}` : ''}</div>
+      <table><tbody>${o.items.map(i => `<tr><td>${esc(i.name)}</td><td>× ${i.qty}</td><td>${fmt(i.unitPrice * i.qty)}</td></tr>`).join('')}<tr><td colspan="2"><b>Tổng</b></td><td><b>${fmt(o.total)}</b></td></tr></tbody></table>
+      <div class="row">${done ? '<span class="muted">Đơn đã kết thúc.</span>' : `<span class="muted">Trạng thái:</span>${statusSelect('order', o.code, o.status, ORDER_ST)}`}</div></div>`;
+  }).join('');
+}
+function supportHtml(){
+  const list = data.support.filter(s => !filter || s.status === filter);
+  const bar = `<div class="tools"><span>Lọc:</span><select id="flt"><option value="">Tất cả</option>${Object.entries(SUP_ST).map(([k, v]) => `<option value="${k}" ${filter === k ? 'selected' : ''}>${v}</option>`).join('')}</select><span>${list.length} yêu cầu</span></div>`;
+  if(!list.length) return bar + '<div class="empty">Chưa có yêu cầu hỗ trợ nào.</div>';
+  const pname = id => (data.products.find(p => p.id === id) || {}).name || id;
+  return bar + list.map(s => `<div class="card"><div class="card-head"><div><span class="code">#${s.id}</span><span class="tag ${s.status === 'da_xong' ? 'ok' : s.status === 'moi' ? 'warn' : ''}">${SUP_ST[s.status] || esc(s.status)}</span></div><span class="muted">${esc(new Date(s.created_at).toLocaleString('vi-VN'))}</span></div>
+    <div class="kv"><b>Khách:</b> ${esc(s.name)} · <b>SĐT:</b> ${esc(s.phone)}${s.product_id ? `<br><b>Sản phẩm:</b> ${esc(pname(s.product_id))}` : ''}${s.fault_id ? `<br><b>Loại lỗi:</b> ${esc(s.fault_id)}` : ''}<br><b>Mô tả:</b> ${esc(s.symptom)}${s.chat_summary ? `<br><b>Đã hỏi AI:</b> ${esc(s.chat_summary)}` : ''}</div>
+    <div class="row"><span class="muted">Trạng thái:</span>${statusSelect('support', String(s.id), s.status, SUP_ST)}</div></div>`).join('');
+}
+function stockHtml(){
+  return data.products.map(p => `<div class="card"><div class="card-head"><div><span class="code">${esc(p.name)}</span> <span class="muted">(${esc(p.id)})</span></div><span class="muted">${fmt(p.price)}</span></div>
+    <div class="stock"><label for="st-${esc(p.id)}" class="muted">Tồn kho:</label><input id="st-${esc(p.id)}" type="number" min="0" max="100000" value="${p.stock}"><button class="btn" data-save-stock="${esc(p.id)}">Lưu</button></div></div>`).join('');
+}
+function feedbackHtml(){
+  if(!data.feedback.length) return '<div class="empty">Chưa có phản hồi nào về câu trả lời của AI.</div>';
+  return data.feedback.map(f => `<div class="card"><div class="card-head"><div><span class="tag ${f.helpful ? 'ok' : 'bad'}">${f.helpful ? 'Có ích' : 'Chưa ổn'}</span></div><span class="muted">${esc(new Date(f.created_at).toLocaleString('vi-VN'))}</span></div>
+    <div class="kv"><b>Khách hỏi:</b> ${esc(f.question)}<br><b>AI trả lời:</b> ${esc(f.answer)}</div></div>`).join('');
+}
+function staffHtml(){
+  const rows = data.staff.map(u => {
+    const locked = u.locked_until && u.locked_until > new Date().toISOString();
+    const self = me && u.id === me.id;
+    return `<div class="card"><div class="card-head"><div><span class="code">${esc(u.username)}</span>${self ? '<span class="tag">Bạn</span>' : ''}<span class="tag ${u.active ? 'ok' : 'bad'}">${u.active ? 'Đang hoạt động' : 'Đã vô hiệu'}</span>${locked ? '<span class="tag warn">Đang bị khoá</span>' : ''}</div>
+      <span class="muted">${u.last_login ? 'Đăng nhập gần nhất: ' + esc(new Date(u.last_login).toLocaleString('vi-VN')) : 'Chưa đăng nhập'}</span></div>
+      <div class="row">
+        <label class="muted" for="role-${u.id}">Vai trò:</label>
+        <select id="role-${u.id}" data-act="role" data-id="${u.id}" ${self ? 'disabled' : ''}><option value="staff" ${u.role === 'staff' ? 'selected' : ''}>Nhân viên</option><option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Quản trị viên</option></select>
+        ${self ? '' : `<button class="btn ghost" data-act="toggle" data-id="${u.id}" data-active="${u.active ? 1 : 0}">${u.active ? 'Vô hiệu hoá' : 'Kích hoạt lại'}</button>`}
+        ${locked ? `<button class="btn ghost" data-act="unlock" data-id="${u.id}">Mở khoá</button>` : ''}
+      </div>
+      <form class="row" data-form="reset" data-id="${u.id}"><input type="password" placeholder="Mật khẩu mới (từ 8 ký tự)" minlength="8" maxlength="100" autocomplete="new-password" required aria-label="Mật khẩu mới cho ${esc(u.username)}"><button class="btn ghost" type="submit">Đặt lại mật khẩu</button></form></div>`;
+  }).join('');
+  return `<div class="card"><div class="card-head"><b>Thêm nhân viên</b></div>
+    <form class="row" data-form="create"><input name="username" placeholder="Tên đăng nhập" required minlength="3" maxlength="30" autocomplete="off" aria-label="Tên đăng nhập mới">
+      <input name="password" type="password" placeholder="Mật khẩu (từ 8 ký tự)" required minlength="8" maxlength="100" autocomplete="new-password" aria-label="Mật khẩu mới">
+      <select name="role" aria-label="Vai trò"><option value="staff">Nhân viên</option><option value="admin">Quản trị viên</option></select><button class="btn" type="submit">Tạo tài khoản</button></form>
+    <p class="muted" style="margin-top:8px">Nhân viên: xử lý đơn hàng, yêu cầu hỗ trợ, xem phản hồi AI. Quản trị viên: thêm quyền sửa tồn kho, quản lý nhân viên và xem nhật ký.</p></div>` + rows;
+}
+function auditHtml(){
+  if(!data.audit.length) return '<div class="empty">Chưa có thao tác nào.</div>';
+  return `<table><thead><tr><th>Thời gian</th><th>Người dùng</th><th>Thao tác</th><th>Chi tiết</th><th>IP</th></tr></thead><tbody>${data.audit.map(a => `<tr><td>${esc(new Date(a.created_at).toLocaleString('vi-VN'))}</td><td>${esc(a.username || '—')}</td><td>${esc(ACTIONS[a.action] || a.action)}</td><td style="text-align:left">${esc(a.detail)}</td><td>${esc(a.ip)}</td></tr>`).join('')}</tbody></table>`;
+}
+function accountHtml(){
+  return `<div class="card"><div class="card-head"><b>Đổi mật khẩu</b></div>
+    <form class="row" data-form="mypass"><input name="current" type="password" placeholder="Mật khẩu hiện tại" required autocomplete="current-password" aria-label="Mật khẩu hiện tại">
+      <input name="next" type="password" placeholder="Mật khẩu mới (từ 8 ký tự)" required minlength="8" maxlength="100" autocomplete="new-password" aria-label="Mật khẩu mới"><button class="btn" type="submit">Đổi mật khẩu</button></form>
+    <p class="muted" style="margin-top:8px">Sau khi đổi, các thiết bị khác đang đăng nhập sẽ bị đăng xuất.</p></div>`;
+}
+function render(){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === tab));
+  $('panel').innerHTML = tab === 'orders' ? ordersHtml() : tab === 'support' ? supportHtml() : tab === 'feedback' ? feedbackHtml() : tab === 'staff' ? staffHtml() : tab === 'audit' ? auditHtml() : tab === 'account' ? accountHtml() : stockHtml();
+}
+
+/* ----- sự kiện ----- */
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault(); $('loginErr').textContent = '';
+  try{
+    const r = await fetch(API_BASE + '/api/admin/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username: $('uname').value.trim(), password: $('token').value})}).catch(() => null);
+    if(!r){ $('loginErr').textContent = 'Không kết nối được máy chủ. Backend đã chạy chưa?'; return; }
+    const d = await r.json().catch(() => ({}));
+    if(!r.ok){ $('loginErr').textContent = d.error || ('Lỗi ' + r.status); return; }
+    token = d.token; tok.set(token); $('token').value = ''; loadAll();
+  }catch(ex){ $('loginErr').textContent = ex.message; }
+});
+$('logout').addEventListener('click', async () => { try{ await api('/api/admin/logout', {method: 'POST'}); }catch(e){} tok.clear(); token = ''; me = null; show(false); });
+$('refresh').addEventListener('click', () => loadAll());
+document.querySelector('.tabs').addEventListener('click', e => { const t = e.target.closest('.tab'); if(t){ tab = t.dataset.tab; filter = ''; render(); } });
+$('panel').addEventListener('change', async e => {
+  const el = e.target;
+  if(el.id === 'flt'){ filter = el.value; render(); return; }
+  if(el.dataset.act === 'role'){ await staffCall('/api/admin/staff/' + el.dataset.id, {role: el.value}, 'Đã đổi vai trò.'); return; }
+  if(!el.dataset.kind) return;
+  const path = el.dataset.kind === 'order' ? `/api/admin/orders/${encodeURIComponent(el.dataset.key)}` : `/api/admin/support/${encodeURIComponent(el.dataset.key)}`;
+  try{ await api(path, {method: 'PATCH', body: {status: el.value}}); toast('Đã cập nhật trạng thái.', 'ok'); }
+  catch(ex){ toast(ex.message, 'err'); el.value = el.dataset.cur; return; }
+  loadAll();
+});
+async function staffCall(path, body, okMsg, method = 'PATCH'){
+  try{ await api(path, {method, body}); toast(okMsg, 'ok'); await loadAll(); return true; }
+  catch(ex){ toast(ex.message, 'err'); return false; }
+}
+$('panel').addEventListener('submit', async e => {
+  const f = e.target.closest('form[data-form]'); if(!f) return;
+  e.preventDefault();
+  const kind = f.dataset.form;
+  if(kind === 'create'){
+    const fd = new FormData(f);
+    if(await staffCall('/api/admin/staff', {username: fd.get('username').trim(), password: fd.get('password'), role: fd.get('role')}, 'Đã tạo tài khoản.', 'POST')) f.reset();
+  }else if(kind === 'reset'){
+    await staffCall('/api/admin/staff/' + f.dataset.id, {password: f.querySelector('input').value}, 'Đã đặt lại mật khẩu, nhân viên đó sẽ bị đăng xuất.');
+  }else if(kind === 'mypass'){
+    const fd = new FormData(f);
+    if(await staffCall('/api/admin/password', {current: fd.get('current'), next: fd.get('next')}, 'Đã đổi mật khẩu.', 'POST')) f.reset();
+  }
+});
+$('panel').addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]');
+  if(b && b.dataset.act === 'toggle'){ await staffCall('/api/admin/staff/' + b.dataset.id, {active: b.dataset.active !== '1'}, 'Đã cập nhật tài khoản.'); return; }
+  if(b && b.dataset.act === 'unlock'){ await staffCall('/api/admin/staff/' + b.dataset.id, {unlock: true}, 'Đã mở khoá.'); return; }
+  const id = e.target.dataset.saveStock; if(!id) return;
+  const v = Number($('st-' + id).value);
+  if(!Number.isInteger(v) || v < 0){ toast('Tồn kho phải là số nguyên từ 0 trở lên.', 'err'); return; }
+  try{ await api('/api/admin/products/' + encodeURIComponent(id), {method: 'PATCH', body: {stock: v}}); toast('Đã lưu tồn kho.', 'ok'); loadAll(); }
+  catch(ex){ toast(ex.message, 'err'); }
+});
+
+if(token) loadAll(); else show(false);
+</script>
+</body>
+</html>

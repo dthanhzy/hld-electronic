@@ -1,0 +1,21 @@
+{
+  "name": "he-thong-loa-backend",
+  "version": "1.0.0",
+  "description": "Backend cho web bán loa tích hợp AI (Express + SQLite)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch-path=./server.js --watch-path=./db.js --watch-path=./data.js --watch-path=./validate.js server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test.js",
+    "backup": "node --disable-warning=ExperimentalWarning backup.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0"
+  }
+}
